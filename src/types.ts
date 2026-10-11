@@ -6,6 +6,7 @@ export interface TeamMember {
   item: string | null
   ability: string | null
   tera: string | null
+  nature?: string | null
   moves: string[]
 }
 

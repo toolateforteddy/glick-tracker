@@ -66,6 +66,12 @@ function PokemonCard({ mon }: { mon: TeamMember }) {
               <dt className="text-slate-500">Ability</dt>
               <dd className="truncate text-slate-200">{mon.ability || '—'}</dd>
             </div>
+            {mon.nature && (
+              <div className="flex gap-1.5">
+                <dt className="text-slate-500">Nature</dt>
+                <dd className="truncate text-slate-200">{mon.nature}</dd>
+              </div>
+            )}
           </dl>
         </div>
       </div>
