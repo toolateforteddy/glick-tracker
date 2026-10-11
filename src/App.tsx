@@ -16,6 +16,8 @@ const DATA_URL = new URLSearchParams(window.location.search).has('demo')
 
 export default function App() {
   const { data, error, lastFetched } = usePolling(DATA_URL)
+  // The gist starts out as a placeholder until the sync job writes its first payload.
+  const live = Boolean(data?.record && Array.isArray(data.matches))
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
@@ -26,7 +28,7 @@ export default function App() {
           </h1>
           <p className="text-sm text-slate-400">Live VGC tournament tracking for Wolfe Glick</p>
         </div>
-        {data && (
+        {live && data && (
           <div className="flex items-center gap-1.5 text-xs text-slate-500" title={lastFetched?.toLocaleTimeString()}>
             <RefreshCw className="size-3.5" />
             Data updated {formatAgo(data.updatedAt)}
@@ -47,6 +49,10 @@ export default function App() {
             <Loader2 className="size-5 animate-spin" /> Loading tracker…
           </div>
         )
+      ) : !live ? (
+        <div className="rounded-3xl border border-dashed border-slate-800 py-20 text-center text-slate-400">
+          No tournament data yet. This fills in once Wolfe's next event is picked up.
+        </div>
       ) : (
         <main className="space-y-4">
           <HeroStatus data={data} />
@@ -59,7 +65,7 @@ export default function App() {
               <RoundLog matches={data.matches} />
             </div>
           </div>
-          <TeamGrid team={data.team} />
+          <TeamGrid team={data.team ?? []} />
         </main>
       )}
 
