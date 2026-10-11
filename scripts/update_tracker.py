@@ -10,6 +10,7 @@ Environment:
   STREAM_URL       (optional) link for the stream badge, default Wolfe's Twitch
   LIMITLESS_API_KEY (optional) sent as X-Access-Key if your key is needed
   LOOKBACK_DAYS    (optional) how far back discovery looks, default 3
+  IDLE_SNOOZE_MINUTES (optional) back-off when Wolfe is in no live event, default 60
   DRY_RUN          (optional) "1" prints the payload instead of patching the gist
 
 Only the standard library is used so the workflow needs no pip install.
@@ -465,7 +466,7 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     if not (previous and previous.get("tournamentId") == rk9_id and previous.get("roundKey") == payload["roundKey"]):
         # A new round just went up: let it play out before scraping again.
         snooze = int(os.environ.get("RK9_SNOOZE_MINUTES") or 40)
-        payload["snoozeUntil"] = (now + timedelta(minutes=snooze)).isoformat().replace("+00:00", "Z")
+        payload["snoozeUntil"] = snooze_stamp(now, snooze)
     else:
         payload["snoozeUntil"] = None
     return payload
@@ -473,7 +474,16 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
 
 def snoozed(previous: dict | None, now: datetime) -> bool:
     until = parse_date((previous or {}).get("snoozeUntil"))
-    return bool(previous and previous.get("source") == "rk9" and until and now < until)
+    return bool(previous and until and now < until)
+
+
+def snooze_stamp(now: datetime, minutes: int) -> str:
+    return (now + timedelta(minutes=minutes)).isoformat().replace("+00:00", "Z")
+
+
+def idle_minutes() -> int:
+    """How long to back off when Wolfe isn't playing anything we can see, or his event is over."""
+    return int(os.environ.get("IDLE_SNOOZE_MINUTES") or 60)
 
 
 def main() -> int:
@@ -497,7 +507,7 @@ def main() -> int:
     if not tournament_id:
         # RK9 (Regionals, ICs, Worlds) first: an explicit id, or an event running today.
         if previous and snoozed(previous, now) and os.environ.get("FORCE") != "1":
-            print(f"RK9 scraping snoozed until {previous['snoozeUntil']}; gist left as is.")
+            print(f"Scraping snoozed until {previous['snoozeUntil']}; gist left as is.")
             return 0
         rk9_name = None
         if not rk9_id:
@@ -526,7 +536,12 @@ def main() -> int:
         else:
             tournament_id, standings, me = discover_tournament(player_id, player_name, now, lookback)
             if not tournament_id:
-                print(f"No VGC tournament in the last {lookback} days includes {player_id or player_name}; gist left as is.")
+                # Nothing to track: keep the last payload but only look again in an hour.
+                until = snooze_stamp(now, idle_minutes())
+                print(f"No VGC tournament in the last {lookback} days includes {player_id or player_name}; "
+                      f"next check after {until}.")
+                if not dry_run and gist_id and token:
+                    write_payload(gist_id, token, {**(previous or {}), "snoozeUntil": until})
                 return 0
         details = limitless(f"/tournaments/{tournament_id}/details") or {}
         pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
@@ -534,6 +549,9 @@ def main() -> int:
         payload["source"] = "limitless"
         if override := team_override():
             payload["team"] = override
+
+    if payload.get("phase") == "finished":
+        payload["snoozeUntil"] = snooze_stamp(now, idle_minutes())
 
     if dry_run:
         print(json.dumps(payload, indent=2))
