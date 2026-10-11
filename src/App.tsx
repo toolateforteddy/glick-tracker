@@ -23,21 +23,17 @@ export default function App() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-2">
-        <div>
+      <header className="mb-6 flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
             The Glick Tracker
           </h1>
           <p className="text-sm text-slate-400">Live VGC tournament tracking for Wolfe Glick</p>
+          {live && data && <Updated at={data.updatedAt} fetched={lastFetched} className="mt-2 sm:hidden" />}
         </div>
-        <div className="flex flex-col items-start gap-2 sm:items-end">
+        <div className="flex shrink-0 flex-col items-end gap-2 pt-1 sm:pt-0">
           <SocialIcons />
-          {live && data && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-500" title={lastFetched?.toLocaleTimeString()}>
-              <RefreshCw className="size-3.5" />
-              Data updated {formatAgo(data.updatedAt)}
-            </div>
-          )}
+          {live && data && <Updated at={data.updatedAt} fetched={lastFetched} className="hidden sm:flex" />}
         </div>
       </header>
 
@@ -102,6 +98,15 @@ export default function App() {
         )}
         . Sprites from Pokémon Showdown.
       </footer>
+    </div>
+  )
+}
+
+function Updated({ at, fetched, className }: { at: string; fetched: Date | null; className: string }) {
+  return (
+    <div className={`flex items-center gap-1.5 text-xs text-slate-500 ${className}`} title={fetched?.toLocaleTimeString()}>
+      <RefreshCw className="size-3.5" />
+      Data updated {formatAgo(at)}
     </div>
   )
 }
