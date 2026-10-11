@@ -1,6 +1,6 @@
 import { CircleDot } from 'lucide-react'
 import { useState } from 'react'
-import { fallbackSpriteUrl, spriteUrl } from '../lib/sprites'
+import { fallbackSpriteUrl, ITEM_SHEET_URL, itemIconPosition, spriteUrl } from '../lib/sprites'
 import { moveClass, teraClass } from '../lib/types-colors'
 import type { TeamMember } from '../types'
 
@@ -60,7 +60,10 @@ function PokemonCard({ mon }: { mon: TeamMember }) {
           <dl className="mt-1 space-y-0.5 text-sm">
             <div className="flex gap-1.5">
               <dt className="text-slate-500">@</dt>
-              <dd className="truncate text-slate-200">{mon.item || '—'}</dd>
+              <dd className="flex min-w-0 items-center gap-1 text-slate-200">
+                <ItemIcon item={mon.item} />
+                <span className="truncate">{mon.item || '—'}</span>
+              </dd>
             </div>
             <div className="flex gap-1.5">
               <dt className="text-slate-500">Ability</dt>
@@ -86,5 +89,17 @@ function PokemonCard({ mon }: { mon: TeamMember }) {
         ))}
       </ul>
     </article>
+  )
+}
+
+function ItemIcon({ item }: { item: string | null }) {
+  const position = itemIconPosition(item)
+  if (!position) return null
+  return (
+    <span
+      aria-hidden
+      className="inline-block size-6 shrink-0 [image-rendering:pixelated]"
+      style={{ background: `url(${ITEM_SHEET_URL}) no-repeat ${position}` }}
+    />
   )
 }

@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "gen:moves": "node scripts/gen-move-types.mjs"
+    "gen:dex": "node scripts/gen-dex-data.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.55.0",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@pkmn/dex": "^0.10.11",
+    "@pkmn/img": "^0.3.4",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",

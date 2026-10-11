@@ -1,3 +1,5 @@
+import itemSprites from '../data/item-sprites.json'
+
 // Base species whose own names contain a hyphen; everything after the first
 // hyphen in other names is a forme (e.g. Urshifu-Rapid-Strike).
 const HYPHENATED_BASES = [
@@ -24,3 +26,14 @@ export const spriteUrl = (species: string) =>
 
 export const fallbackSpriteUrl = (species: string) =>
   `https://play.pokemonshowdown.com/sprites/dex/${showdownSpriteId(species)}.png`
+
+const ITEM_SPRITES: Record<string, number> = itemSprites
+
+export const ITEM_SHEET_URL = 'https://play.pokemonshowdown.com/sprites/itemicons-sheet.png'
+
+/** Background offset of an item's 24px icon in Showdown's item sheet (16 per row), or null if unknown. */
+export function itemIconPosition(item: string | null): string | null {
+  const index = item ? ITEM_SPRITES[toId(item)] : undefined
+  if (!index) return null
+  return `-${(index % 16) * 24}px -${Math.floor(index / 16) * 24}px`
+}
