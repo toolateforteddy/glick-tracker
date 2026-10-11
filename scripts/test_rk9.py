@@ -125,7 +125,9 @@ class RunTest(unittest.TestCase):
         self.assertEqual(calls, ["/pairings/LO002", "/pairings/LO002?pod=2&rnd=1", "/pairings/LO002?pod=2&rnd=2"])
         self.assertEqual(p["status"], "Round 3 Swiss")
         self.assertEqual(p["record"], {"w": 2, "l": 0, "t": 0})
-        self.assertEqual(p["table"], 9)
+        # Table numbers stay out of the public payload so he is not easy to find on site.
+        self.assertNotIn("table", p)
+        self.assertTrue(all("table" not in m for m in p["matches"]))
         self.assertEqual([m["result"] for m in p["matches"]], ["W", "W", None])
         self.assertEqual(p["matches"][1]["opponent"], "Bob B")
         self.assertEqual(p["standing"], 1)

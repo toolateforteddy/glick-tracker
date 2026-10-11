@@ -33,7 +33,6 @@ export function RoundLog({ matches }: { matches: MatchRow[] }) {
                   <td className="px-2 py-2.5 font-mono text-slate-400">{m.label}</td>
                   <td className="px-2 py-2.5">
                     <div className="font-medium text-slate-100">{m.opponent ?? (m.result === 'BYE' ? 'Bye' : 'TBD')}</div>
-                    {m.table != null && <div className="text-xs text-slate-500">Table {m.table}</div>}
                   </td>
                   <td className="px-2 py-2.5 text-center font-mono text-slate-300">{m.score ?? '—'}</td>
                   <td className="px-2 py-2.5 text-right">

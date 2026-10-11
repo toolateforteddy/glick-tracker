@@ -1,4 +1,4 @@
-import { Radio, Table2, Trophy, Tv } from 'lucide-react'
+import { Radio, Trophy, Tv } from 'lucide-react'
 import type { TrackerPayload } from '../types'
 
 export function HeroStatus({ data }: { data: TrackerPayload }) {
@@ -31,13 +31,6 @@ export function HeroStatus({ data }: { data: TrackerPayload }) {
           )}
           {data.status}
         </span>
-
-        {data.table != null && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800 px-3 py-1.5 text-sm font-semibold text-slate-200">
-            <Table2 className="size-4 text-sky-400" />
-            Table {data.table}
-          </span>
-        )}
 
         {data.stream && (
           <a
