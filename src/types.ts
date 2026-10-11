@@ -42,3 +42,26 @@ export interface TrackerPayload {
   team: TeamMember[]
   matches: MatchRow[]
 }
+
+export interface PastEvent {
+  id: string
+  name: string
+  location: string | null
+  startDate: string
+  endDate: string
+  url: string
+  players: number | null
+  placing: number | null
+  record: { w: number; l: number; t: number }
+  swissRounds: number | null
+  topCutSize: number | null
+  madeTopCut: boolean
+  team: TeamMember[]
+  matches: MatchRow[]
+}
+
+export interface History {
+  updatedAt: string
+  events: PastEvent[]
+  checked?: string[]
+}
