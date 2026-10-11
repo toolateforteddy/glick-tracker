@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { teraClass } from './types-colors'
+import { moveClass, teraClass } from './types-colors'
 
 const FALLBACK = 'bg-slate-700 text-slate-100'
 
@@ -13,5 +13,17 @@ describe('teraClass', () => {
     expect(teraClass(null)).toBe(FALLBACK)
     expect(teraClass('')).toBe(FALLBACK)
     expect(teraClass('Shadow')).toBe(FALLBACK)
+  })
+})
+
+describe('moveClass', () => {
+  it('colours a move by its type', () => {
+    expect(moveClass('Dragon Pulse')).toContain('bg-indigo-500/20')
+    expect(moveClass('Knock Off')).toContain('bg-neutral-500/20')
+    expect(moveClass('Protect')).toBe(moveClass('Follow Me'))
+  })
+
+  it('keeps the neutral pill for unknown moves', () => {
+    expect(moveClass('Not A Move')).toBe('bg-slate-800/70 text-slate-200')
   })
 })
