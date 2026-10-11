@@ -77,7 +77,7 @@ python3 -m unittest discover scripts                              # script tests
 
 ## How the numbers are computed
 
-- **OPW%**: average of Swiss opponents' match win rates, each floored at 25% (byes excluded).
+- **Resistance** (OPW%): average of Swiss opponents' match win rates, each floored at 25% (byes excluded).
 - **Top cut**: from match points (W=3, T=1). *Cut Clinched* when fewer players than the cut size can
   still reach Wolfe's current points; *Eliminated* when at least that many already have more points
   than his best possible finish; otherwise *Alive*. After Swiss it uses his final placing.
