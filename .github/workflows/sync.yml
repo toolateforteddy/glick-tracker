@@ -1,0 +1,37 @@
+name: Sync tournament data
+
+on:
+  workflow_dispatch:
+    inputs:
+      tournament_id:
+        description: Limitless tournament id (leave blank to auto-discover)
+        required: false
+  schedule:
+    # Every 10 minutes during weekend tournament hours (UTC): Sat/Sun 12:00-23:59
+    # plus the late US evening that spills into Sun/Mon 00:00-05:59.
+    - cron: '*/10 12-23 * * 6,0'
+    - cron: '*/10 0-5 * * 0,1'
+
+concurrency:
+  group: sync-tracker
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Update gist
+        env:
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          TOURNAMENT_ID: ${{ inputs.tournament_id || vars.TOURNAMENT_ID }}
+          PLAYER_ID: ${{ vars.PLAYER_ID }}
+          STREAM_URL: ${{ vars.STREAM_URL }}
+          LIMITLESS_API_KEY: ${{ secrets.LIMITLESS_API_KEY }}
+        run: python scripts/update_tracker.py
+
