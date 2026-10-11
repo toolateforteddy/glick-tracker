@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fallbackSpriteUrl, showdownSpriteId, spriteUrl } from './sprites'
+import { fallbackSpriteUrl, itemIconPosition, showdownSpriteId, spriteUrl } from './sprites'
 
 describe('showdownSpriteId', () => {
   it.each([
@@ -31,5 +31,17 @@ describe('sprite urls', () => {
   it('point at Showdown sprite sets', () => {
     expect(spriteUrl('Rillaboom')).toBe('https://play.pokemonshowdown.com/sprites/gen5/rillaboom.png')
     expect(fallbackSpriteUrl('Rillaboom')).toBe('https://play.pokemonshowdown.com/sprites/dex/rillaboom.png')
+  })
+})
+
+describe('itemIconPosition', () => {
+  it('finds an item in the icon sheet by name', () => {
+    expect(itemIconPosition('Sceptilite')).toBe('-120px -912px')
+    expect(itemIconPosition('Focus Sash')).toBe('-168px -216px')
+  })
+
+  it('returns null for unknown or missing items', () => {
+    expect(itemIconPosition('Not An Item')).toBeNull()
+    expect(itemIconPosition(null)).toBeNull()
   })
 })
