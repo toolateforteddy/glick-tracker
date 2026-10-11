@@ -136,6 +136,15 @@ class IdleBackoffTest(unittest.TestCase):
         self.assertEqual(ut.weekend_over(sat), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
         self.assertEqual(ut.weekend_over(early_mon), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
 
+    def test_wolfe_done(self):
+        self.assertTrue(ut.wolfe_done({"phase": "finished"}))
+        self.assertTrue(ut.wolfe_done({"phase": "swiss", "status": "Dropped after Round 6"}))
+        lost = {"phase": "topcut", "matches": [{"phase": "swiss", "result": "W"}, {"phase": "topcut", "result": "L"}]}
+        self.assertTrue(ut.wolfe_done(lost))
+        won = {"phase": "topcut", "matches": [{"phase": "topcut", "result": "W"}]}
+        self.assertFalse(ut.wolfe_done(won))
+        self.assertFalse(ut.wolfe_done({"phase": "swiss", "status": "Round 10 Swiss", "matches": []}))
+
     def test_snoozed_run_makes_no_requests(self):
         disc, write = self.run_main({"snoozeUntil": "2026-10-11T18:30:00Z"})
         disc.assert_not_called()
