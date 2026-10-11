@@ -178,7 +178,7 @@ class RunTest(unittest.TestCase):
             p = ut.run_rk9("LO002", "Louisville", "Wolfe Glick", first, NOW, "s")
         self.assertEqual([c.args[0] for c in f.call_args_list], ["/pairings/LO002", "/pairings/LO002?pod=2&rnd=3"])
         self.assertEqual(p["phase"], "finished")
-        self.assertEqual(p["status"], "Eliminated after Round 3")
+        self.assertEqual(p["status"], "Finished 2-1")
         self.assertEqual(p["record"], {"w": 2, "l": 1, "t": 0})
         self.assertEqual(p["matches"][-1]["result"], "L")
         self.assertEqual(p["topCutStatus"], "eliminated")

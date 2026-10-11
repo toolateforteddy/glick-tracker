@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { TrackerPayload } from '../types'
-import { sourceLink, wolfeOut } from './status'
+import { displayStatus, sourceLink, wolfeOut } from './status'
 
 const base: TrackerPayload = {
   updatedAt: '2026-10-11T16:00:00Z',
@@ -47,5 +47,13 @@ describe('wolfeOut', () => {
 describe('sourceLink', () => {
   it('points RK9 events at their pairings page', () => {
     expect(sourceLink(base)?.href).toBe('https://rk9.gg/pairings/LO002-drfp6esCSpyU3s')
+  })
+})
+
+describe('displayStatus', () => {
+  it('words a finish gently', () => {
+    expect(displayStatus({ ...base, status: 'Eliminated after Round 12', record: { w: 8, l: 4 } })).toBe('Finished 8-4')
+    expect(displayStatus({ ...base, status: 'Eliminated in Top 8' })).toBe('Top 8 finish')
+    expect(displayStatus(base)).toBe('Round 11 in progress')
   })
 })

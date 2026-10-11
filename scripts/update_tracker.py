@@ -338,7 +338,7 @@ def build_payload(
         elif last_cut and last_cut["result"] == "W":
             status = f"Won {last_cut['label']} · awaiting next round"
         elif last_cut:
-            status = f"Eliminated in {last_cut['label']}"
+            status = f"{last_cut['label']} finish"
         else:
             status = "Top Cut in progress"
     elif latest_key:
@@ -504,7 +504,9 @@ def rk9_cut(rk9_id: str, pod: int, player_name: str, previous: dict | None, info
             rk9_id, previous.get("tournament") or rk9_id, {pending[-1]: found}, player_name, previous, swiss, cut)
         if me:
             payload.update(build_payload(rk9_id, details, standings, pairings, me, previous, now, stream))
-    payload.update(phase="finished", status=f"Eliminated after Round {last}", currentMatchPending=False,
+    rec = payload.get("record") or {}
+    record = f"{rec.get('w', 0)}-{rec.get('l', 0)}" + (f"-{rec['t']}" if rec.get("t") else "")
+    payload.update(phase="finished", status=f"Finished {record}", currentMatchPending=False,
                    roundStartedAt=None, snoozeUntil=None)
     if payload.get("topCutStatus") != "clinched":
         payload.update(topCutStatus="eliminated", topCutAlive=False)

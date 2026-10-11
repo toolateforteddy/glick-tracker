@@ -15,10 +15,8 @@ export function RoundTimer({ data }: { data: TrackerPayload }) {
   const showTimer =
     data.currentMatchPending !== false && Number.isFinite(started) && elapsedMs >= 0 && elapsedMs < STALE_AFTER_MIN * 60_000
 
-  if (wolfeOut(data)) {
-    // No more rounds for him to time; keep only the way out to the full pairings.
-    return link ? <LinkButton link={link} /> : null
-  }
+  // No more rounds for him to time; the hero card carries the link to the event instead.
+  if (wolfeOut(data)) return null
 
   if (!data.currentMatchPending && data.phase !== 'swiss' && data.phase !== 'topcut') {
     return (
