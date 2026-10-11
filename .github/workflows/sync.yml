@@ -6,6 +6,13 @@ on:
       tournament_id:
         description: Limitless tournament id (leave blank to auto-discover)
         required: false
+      rk9_tournament_id:
+        description: RK9 tournament id, e.g. LO002-drfp6esCSpyU3s (leave blank to auto-discover)
+        required: false
+      force:
+        description: Scrape RK9 now even if the post-pairings snooze is active
+        type: boolean
+        default: false
   schedule:
     # Every 10 minutes during weekend tournament hours (UTC): Sat/Sun 12:00-23:59
     # plus the late US evening that spills into Sun/Mon 00:00-05:59.
@@ -30,6 +37,11 @@ jobs:
           GIST_ID: ${{ secrets.GIST_ID }}
           GH_PAT: ${{ secrets.GH_PAT }}
           TOURNAMENT_ID: ${{ inputs.tournament_id || vars.TOURNAMENT_ID }}
+          RK9_TOURNAMENT_ID: ${{ inputs.rk9_tournament_id || vars.RK9_TOURNAMENT_ID }}
+          RK9_SWISS_ROUNDS: ${{ vars.RK9_SWISS_ROUNDS }}
+          RK9_TOP_CUT: ${{ vars.RK9_TOP_CUT }}
+          FORCE: ${{ inputs.force && '1' || '' }}
+          TEAM_PASTE_URL: ${{ vars.TEAM_PASTE_URL }}
           PLAYER_ID: ${{ vars.PLAYER_ID }}
           STREAM_URL: ${{ vars.STREAM_URL }}
           LIMITLESS_API_KEY: ${{ secrets.LIMITLESS_API_KEY }}

@@ -64,7 +64,7 @@ export default function App() {
       )}
 
       <footer className="mt-10 text-center text-xs text-slate-600">
-        Fan-made tracker. Data from Limitless VGC, sprites from Pokémon Showdown.
+        Fan-made tracker. Data from {data?.source === 'rk9' ? 'RK9' : 'Limitless VGC'}, sprites from Pokémon Showdown.
       </footer>
     </div>
   )

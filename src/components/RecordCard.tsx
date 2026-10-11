@@ -28,7 +28,7 @@ export function RecordCard({ data }: { data: TrackerPayload }) {
       </div>
 
       <dl className="mt-5 grid grid-cols-2 gap-3">
-        <Stat label="Rank" value={data.standing != null ? `#${data.standing}` : '—'} />
+        <Stat label={data.source === 'rk9' ? 'Rank (by points)' : 'Rank'} value={data.standing != null ? `#${data.standing}` : '—'} />
         <Stat label="OPW%" value={data.opw != null ? `${data.opw.toFixed(2)}%` : '—'} />
       </dl>
 

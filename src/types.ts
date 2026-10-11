@@ -22,6 +22,7 @@ export interface MatchRow {
 
 export interface TrackerPayload {
   updatedAt: string
+  source?: 'limitless' | 'rk9'
   tournament: string
   tournamentId?: string | null
   tournamentUrl?: string | null
