@@ -75,7 +75,24 @@ export default function App() {
       </div>
 
       <footer className="mt-10 text-center text-xs text-slate-600">
-        Fan-made tracker. Data from {data?.source === 'rk9' ? 'RK9' : 'Limitless VGC'}, sprites from Pokémon Showdown.
+        Fan-made tracker. Pairings and results come from{' '}
+        <a href="https://rk9.gg" target="_blank" rel="noreferrer" className="text-slate-400 underline hover:text-slate-200">
+          RK9
+        </a>{' '}
+        and{' '}
+        <a href="https://limitlessvgc.com" target="_blank" rel="noreferrer" className="text-slate-400 underline hover:text-slate-200">
+          Limitless VGC
+        </a>
+        {data?.tournamentUrl && (
+          <>
+            {' '}(
+            <a href={data.tournamentUrl} target="_blank" rel="noreferrer" className="text-slate-400 underline hover:text-slate-200">
+              this event on {data.source === 'rk9' ? 'RK9' : 'Limitless'}
+            </a>
+            )
+          </>
+        )}
+        . Sprites from Pokémon Showdown.
       </footer>
     </div>
   )
