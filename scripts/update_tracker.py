@@ -28,6 +28,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 import rk9
@@ -418,12 +419,14 @@ def parse_paste(text: str) -> list[dict]:
         head = re.sub(r"\((M|F)\)", "", head).strip()
         nick = re.search(r"\(([^)]+)\)\s*$", head)
         mon: dict[str, Any] = {"species": nick[1] if nick else head, "item": item.strip() or None,
-                               "ability": None, "tera": None, "moves": []}
+                               "ability": None, "tera": None, "nature": None, "moves": []}
         for line in lines[1:]:
             if line.startswith("Ability:"):
                 mon["ability"] = line.split(":", 1)[1].strip()
             elif line.startswith("Tera Type:"):
                 mon["tera"] = line.split(":", 1)[1].strip()
+            elif line.endswith(" Nature"):
+                mon["nature"] = line.removesuffix(" Nature").strip()
             elif line.startswith("-"):
                 mon["moves"].append(line[1:].strip())
         team.append(mon)
@@ -439,6 +442,17 @@ def team_override() -> list[dict] | None:
             url = url.rstrip("/") + "/json"
         data = http_json(url)
         return parse_paste(data.get("paste", "") if isinstance(data, dict) else str(data))
+    return None
+
+
+TEAMS_DIR = Path(__file__).resolve().parent.parent / "data" / "teams"
+
+
+def saved_team(tournament_id: str | None) -> list[dict] | None:
+    """A team list committed to data/teams/<tournament id>.txt, for events that never published one."""
+    path = TEAMS_DIR / f"{tournament_id}.txt"
+    if tournament_id and path.is_file():
+        return parse_paste(path.read_text())
     return None
 
 
@@ -476,7 +490,7 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     payload["source"] = "rk9"
     payload["tournamentUrl"] = f"{rk9.RK9}/tournament/{rk9_id}"
     payload["players"] = info["players"]
-    payload["team"] = team_override() or rk9.team_from_payload(previous, rk9_id)
+    payload["team"] = rk9.team_from_payload(previous, rk9_id)
     if not (previous and previous.get("tournamentId") == rk9_id and previous.get("roundKey") == payload["roundKey"]):
         # A new round just went up: let it play out before scraping again.
         snooze = int(os.environ.get("RK9_SNOOZE_MINUTES") or 40)
@@ -622,8 +636,9 @@ def sync_once() -> tuple[int, str | None]:
         pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
         payload = build_payload(tournament_id, details, standings, pairings, me, previous, now, stream)
         payload["source"] = "limitless"
-        if override := team_override():
-            payload["team"] = override
+
+    if team := team_override() or saved_team(payload.get("tournamentId")):
+        payload["team"] = team
 
     if wolfe_done(payload):
         # Nothing more to follow this weekend; the next event starts the cycle again.

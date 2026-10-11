@@ -237,6 +237,16 @@ Ability: Intimidate
         self.assertEqual(team[0]["moves"], ["Moonblast", "Shadow Ball"])
         self.assertEqual(team[1]["species"], "Incineroar")
         self.assertEqual(team[1]["item"], "Safety Goggles")
+        self.assertEqual(team[0]["nature"], "Timid")
+        self.assertIsNone(team[1]["nature"])
+
+    def test_saved_team(self):
+        team = ut.saved_team("LO002-drfp6esCSpyU3s")
+        self.assertEqual([m["species"] for m in team][:2], ["Sceptile", "Tyranitar"])
+        self.assertEqual(len(team), 6)
+        self.assertTrue(all(len(m["moves"]) == 4 and m["nature"] for m in team))
+        self.assertIsNone(ut.saved_team("nope"))
+        self.assertIsNone(ut.saved_team(None))
 
 
 if __name__ == "__main__":
