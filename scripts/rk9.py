@@ -10,6 +10,7 @@ pairings) so update_tracker.build_payload can do the rest.
 from __future__ import annotations
 
 import re
+import time
 import urllib.error
 import urllib.request
 from datetime import date
@@ -20,6 +21,7 @@ RK9 = "https://rk9.gg"
 USER_AGENT = "glick-tracker/1.0 (personal fan tracker; polls one pairings page every 10 min)"
 MASTERS_POD = 2
 MAX_ROUNDS = 25
+REQUEST_GAP_SECONDS = 1.5
 
 RECORD_RE = re.compile(r"\((\d+)\s*-\s*(\d+)\s*-\s*(\d+)\)")
 ROUND_REF_RE = re.compile(r"P(\d+)R(\d+)$")
@@ -119,21 +121,28 @@ def normalize_name(name: str | None) -> str:
 def _parse_player(node: Node | None) -> dict | None:
     if node is None:
         return None
+    # Each real player cell has a <span class="name">; the "Player 1"/"Player 2" header row
+    # (also a .match row) and empty bye cells don't.
     name_node = node.find(lambda n: "name" in n.classes)
-    text = node.text()
-    name = name_node.text() if name_node else RECORD_RE.split(text)[0]
-    name = " ".join(name.split())
+    if name_node is None:
+        return None
+    name = " ".join(re.sub(r"\[[^\]]*\]", "", name_node.text()).split())
     if not name:
         return None
-    m = RECORD_RE.search(text)
+    # The live round carries the record as data-* attributes on <span class="record">; the
+    # per-round fragments print it as text, "(6-3-0) 18 pts".
+    record = None
+    rec_node = node.find(lambda n: "record" in n.classes and "data-wins" in n.attrs)
+    if rec_node is not None:
+        try:
+            record = {k: int(rec_node.attrs.get(f"data-{k}") or 0) for k in ("wins", "losses", "ties")}
+        except ValueError:
+            record = None
+    if record is None and (m := RECORD_RE.search(node.text())):
+        record = {"wins": int(m[1]), "losses": int(m[2]), "ties": int(m[3])}
     classes = node.classes
     status = next((s for s in ("winner", "loser", "tie", "dropped") if s in classes), None)
-    return {
-        "name": name,
-        "id": normalize_name(name),
-        "record": {"wins": int(m[1]), "losses": int(m[2]), "ties": int(m[3])} if m else None,
-        "status": status,
-    }
+    return {"name": name, "id": normalize_name(name), "record": record, "status": status}
 
 
 def parse_matches(container: Node) -> list[dict]:
@@ -354,13 +363,24 @@ def rounds_to_fetch(previous: dict | None, tournament_id: str, latest_round: int
     return missing + [latest_round]
 
 
-def scrape(tournament_id: str, pod: int, previous: dict | None, player_name: str) -> dict[int, list[dict]]:
+def parse_page_info(html: str) -> dict:
+    """Event name and player count from the pairings page header."""
+    root = parse_html(html)
+    h4 = root.find(lambda n: n.tag == "h4")
+    m = re.search(r"([\d,]+)\s+players", root.text())
+    return {"name": h4.text() if h4 else None, "players": int(m[1].replace(",", "")) if m else None}
+
+
+def scrape(tournament_id: str, pod: int, previous: dict | None,
+           player_name: str) -> tuple[dict[int, list[dict]], dict]:
     """Fetch the current round, plus any earlier rounds not cached in the previous payload.
 
     Older rounds are only fetched once Wolfe is found in the current round, so an event he
-    isn't playing costs a single request.
+    isn't playing costs a single request. Also returns the page's event name and player count.
     """
-    by_round, linked = parse_pairings_page(fetch(f"/pairings/{tournament_id}"), pod)
+    html = fetch(f"/pairings/{tournament_id}")
+    info = parse_page_info(html)
+    by_round, linked = parse_pairings_page(html, pod)
     latest = max(linked | set(by_round), default=0)
     if not latest:
         # No round tabs found: probe rounds until one comes back empty.
@@ -368,18 +388,20 @@ def scrape(tournament_id: str, pod: int, previous: dict | None, player_name: str
             if not (found := fetch_round(tournament_id, pod, rnd)):
                 break
             by_round[rnd] = found
-        return by_round
+        return by_round, info
 
     current = by_round.get(latest) or fetch_round(tournament_id, pod, latest)
     my_id = normalize_name(player_name)
     if not any(p and p["id"] == my_id for m in current for p in (m["p1"], m["p2"])):
-        return {}
+        return {}, info
 
     wanted = rounds_to_fetch(previous, tournament_id, latest)
     rounds = {latest: current}
     for rnd in wanted[:-1]:
+        if rnd not in by_round:
+            time.sleep(REQUEST_GAP_SECONDS)  # back-fill one round at a time, gently
         rounds[rnd] = by_round.get(rnd) or fetch_round(tournament_id, pod, rnd)
-    return {r: m for r, m in rounds.items() if m}
+    return {r: m for r, m in rounds.items() if m}, info
 
 
 def team_from_payload(previous: dict | None, tournament_id: str) -> list[dict]:
