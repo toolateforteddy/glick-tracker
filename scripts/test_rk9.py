@@ -166,6 +166,29 @@ class RunTest(unittest.TestCase):
         self.assertEqual(second["opw"], first["opw"])
         self.assertIsNone(second["snoozeUntil"])
 
+    def test_cut_without_him_ends_his_event(self):
+        first, _ = self.run_once()
+        r3_done = [match(9, ("Wolfe Glick [US]", "2-0-0"), ("Alice A", "1-1-0"), "loser", "winner")]
+        r4 = [match(1, ("Alice A", "2-1-0"), ("Bob B", "1-1-1"))]
+
+        def fetch(path):
+            return "".join(r3_done) if "rnd=3" in path else page({1: R1, 2: R2, 3: R3, 4: r4})
+
+        with mock.patch.object(rk9, "fetch", side_effect=fetch) as f:
+            p = ut.run_rk9("LO002", "Louisville", "Wolfe Glick", first, NOW, "s")
+        self.assertEqual([c.args[0] for c in f.call_args_list], ["/pairings/LO002", "/pairings/LO002?pod=2&rnd=3"])
+        self.assertEqual(p["phase"], "finished")
+        self.assertEqual(p["status"], "Eliminated after Round 3")
+        self.assertEqual(p["record"], {"w": 2, "l": 1, "t": 0})
+        self.assertEqual(p["matches"][-1]["result"], "L")
+        self.assertEqual(p["topCutStatus"], "eliminated")
+        self.assertFalse(p["currentMatchPending"])
+        self.assertTrue(ut.wolfe_done(p))
+
+    def test_not_in_an_event_he_never_played(self):
+        with mock.patch.object(rk9, "fetch", return_value=page({1: [match(1, ("Bob B", "0-0-0"), ("Cara C", "0-0-0"))]})):
+            self.assertIsNone(ut.run_rk9("LO002", "L", "Wolfe Glick", None, NOW, "s"))
+
     def test_snoozed(self):
         prev = {"source": "rk9", "snoozeUntil": "2026-10-11T15:30:00Z"}
         self.assertTrue(ut.snoozed(prev, NOW))
