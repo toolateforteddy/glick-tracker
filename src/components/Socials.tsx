@@ -65,3 +65,24 @@ export function Socials() {
     </section>
   )
 }
+
+/** Logo-only links for the page header; the full cards stay at the bottom. */
+export function SocialIcons() {
+  return (
+    <nav aria-label="Wolfe's socials" className="flex items-center gap-2">
+      {SOCIALS.map(({ name, url, cta, Icon, tone }) => (
+        <a
+          key={name}
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          title={`${cta} on ${name}`}
+          aria-label={`${cta} on ${name}`}
+          className={`grid size-9 place-items-center rounded-xl text-white transition ${tone}`}
+        >
+          <Icon className="size-4" />
+        </a>
+      ))}
+    </nav>
+  )
+}

@@ -4,7 +4,7 @@ import { PastEvents } from './components/PastEvents'
 import { RecordCard } from './components/RecordCard'
 import { RoundLog } from './components/RoundLog'
 import { RoundTimer } from './components/RoundTimer'
-import { Socials } from './components/Socials'
+import { SocialIcons, Socials } from './components/Socials'
 import { TeamGrid } from './components/TeamGrid'
 import { usePolling } from './lib/usePolling'
 
@@ -30,12 +30,15 @@ export default function App() {
           </h1>
           <p className="text-sm text-slate-400">Live VGC tournament tracking for Wolfe Glick</p>
         </div>
-        {live && data && (
-          <div className="flex items-center gap-1.5 text-xs text-slate-500" title={lastFetched?.toLocaleTimeString()}>
-            <RefreshCw className="size-3.5" />
-            Data updated {formatAgo(data.updatedAt)}
-          </div>
-        )}
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <SocialIcons />
+          {live && data && (
+            <div className="flex items-center gap-1.5 text-xs text-slate-500" title={lastFetched?.toLocaleTimeString()}>
+              <RefreshCw className="size-3.5" />
+              Data updated {formatAgo(data.updatedAt)}
+            </div>
+          )}
+        </div>
       </header>
 
       {error && (
