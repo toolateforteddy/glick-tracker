@@ -30,9 +30,9 @@ export function RoundTable({ matches, showGames = true }: { matches: MatchRow[];
       <table className="w-full min-w-[18rem] text-left text-sm">
         <thead className="text-xs uppercase tracking-wider text-slate-500">
           <tr>
-            <th className="px-2 py-2 font-semibold">Rd</th>
+            <th className="px-2 py-2 font-semibold">Round</th>
             <th className="px-2 py-2 font-semibold">Opponent</th>
-            {showGames && <th className="px-2 py-2 text-center font-semibold">Games</th>}
+            {showGames && <th className="px-2 py-2 text-center font-semibold">Score</th>}
             <th className="px-2 py-2 text-right font-semibold">Result</th>
           </tr>
         </thead>

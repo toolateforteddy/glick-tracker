@@ -24,7 +24,7 @@ export function displayStatus(data: TrackerPayload): string {
 /** Where viewers can check the event themselves; our data lags by design since we poll gently. */
 export function sourceLink(data: TrackerPayload): { href: string; label: string } | null {
   if (data.source === 'rk9' && data.tournamentId) {
-    return { href: `https://rk9.gg/pairings/${data.tournamentId}`, label: 'View live pairings on RK9' }
+    return { href: `https://rk9.gg/pairings/${data.tournamentId}`, label: 'View live matchups on RK9' }
   }
   if (data.tournamentUrl) return { href: data.tournamentUrl, label: 'View live standings on Limitless' }
   return null
