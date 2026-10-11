@@ -3,8 +3,9 @@
 A zero-cost, live fan dashboard for following Wolfe Glick through VGC tournaments.
 
 - **Dashboard**: Vite + React + Tailwind + Lucide, built to static files and served from GitHub Pages.
-- **Data**: `scripts/update_tracker.py` pulls standings, pairings and the open team sheet from
-  [Limitless VGC](https://play.limitlesstcg.com) and writes `glick_live.json` to a gist.
+- **Data**: `scripts/update_tracker.py` reads [RK9](https://rk9.gg) pairings for Play! Pokémon events
+  (Regionals, ICs, Worlds) or [Limitless VGC](https://play.limitlesstcg.com) for grassroots events, and
+  writes `glick_live.json` to a gist.
 - **Live updates**: the page re-fetches the gist's raw URL every 30 seconds with a `?t=` cache buster.
 
 ## Setup
@@ -17,6 +18,10 @@ A zero-cost, live fan dashboard for following Wolfe Glick through VGC tournament
    - `VITE_GIST_RAW_URL`: raw URL the dashboard polls. Defaults to
      `https://gist.githubusercontent.com/toolateforteddy/f63b15c0e419f0d8cd3bdce9ceb01372/raw/glick_live.json`
    - `TOURNAMENT_ID`: pin a Limitless tournament instead of auto-discovery
+   - `RK9_TOURNAMENT_ID`: pin an RK9 tournament (the id in `rk9.gg/tournament/<id>`)
+   - `RK9_SWISS_ROUNDS`: total Swiss rounds (day 1 + day 2) for the RK9 event; enables top cut math
+   - `RK9_TOP_CUT`: top cut size for the RK9 event (default 8)
+   - `TEAM_PASTE_URL`: a pokepast.es link for Wolfe's team (RK9 team lists aren't scraped)
    - `PLAYER_ID`: Limitless username to track (otherwise matched by the name "Wolfe Glick")
    - `STREAM_URL`: link for the stream badge (defaults to Wolfe's Twitch)
 3. **Pages**: Settings → Pages → Source: **GitHub Actions**.
@@ -28,7 +33,21 @@ A zero-cost, live fan dashboard for following Wolfe Glick through VGC tournament
 | `deploy.yml` | push to `main` | `npm ci && npm run build`, deploys `./dist` to Pages |
 | `sync.yml` | every 10 min on weekend tournament hours (UTC), or manual | runs `update_tracker.py` |
 
-Run **Sync tournament data** manually with a `tournament_id` to track a specific event.
+Run **Sync tournament data** manually with a `tournament_id` (Limitless) or `rk9_tournament_id` to
+track a specific event.
+
+## RK9 events
+
+Each sync first looks on `rk9.gg/events/pokemon` for an event running today and reads its VG Masters
+pairings. If Wolfe isn't in it, it falls back to Limitless.
+
+RK9 has no API and its robots.txt asks crawlers to stay off pairings pages, so the scraper is kept
+deliberately light:
+- It fetches one pairings page per sync, plus older rounds only on the first run (they're cached in
+  the gist afterwards).
+- After it sees a new round go up, it stops scraping for 40 minutes (`RK9_SNOOZE_MINUTES`) while
+  the round plays out. Run the workflow with **force** to skip the snooze.
+- Rank on RK9 is by match points only (ties share a rank) since RK9 doesn't publish live standings.
 
 ## Local development
 

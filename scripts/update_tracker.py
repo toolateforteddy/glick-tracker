@@ -26,6 +26,8 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+import rk9
+
 LIMITLESS_API = "https://play.limitlesstcg.com/api"
 LIMITLESS_WEB = "https://play.limitlesstcg.com"
 GITHUB_API = "https://api.github.com"
@@ -293,7 +295,7 @@ def build_payload(
             result = "T"
         else:
             result = "L"  # includes -1 (double loss)
-        if opp and is_swiss(p):
+        if opp and is_swiss(p) and result is not None:
             opponents.append(opp)
         matches.append(
             {
@@ -403,6 +405,79 @@ def build_payload(
 # ------------------------------------------------------------------------- Main
 
 
+def parse_paste(text: str) -> list[dict]:
+    """Parse a Showdown/PokePaste export into the dashboard's team schema."""
+    team = []
+    for block in re.split(r"\n\s*\n", text.strip()):
+        lines = [l.strip() for l in block.strip().splitlines() if l.strip()]
+        if not lines:
+            continue
+        head, _, item = lines[0].partition(" @ ")
+        head = re.sub(r"\((M|F)\)", "", head).strip()
+        nick = re.search(r"\(([^)]+)\)\s*$", head)
+        mon = {"species": nick[1] if nick else head, "item": item.strip() or None,
+               "ability": None, "tera": None, "moves": []}
+        for line in lines[1:]:
+            if line.startswith("Ability:"):
+                mon["ability"] = line.split(":", 1)[1].strip()
+            elif line.startswith("Tera Type:"):
+                mon["tera"] = line.split(":", 1)[1].strip()
+            elif line.startswith("-"):
+                mon["moves"].append(line[1:].strip())
+        team.append(mon)
+    return team[:6]
+
+
+def team_override() -> list[dict] | None:
+    """Team from TEAM_PASTE (export text) or TEAM_PASTE_URL (a pokepast.es link), if set."""
+    if text := os.environ.get("TEAM_PASTE", "").strip():
+        return parse_paste(text)
+    if url := os.environ.get("TEAM_PASTE_URL", "").strip():
+        if "pokepast.es" in url and not url.rstrip("/").endswith("/json"):
+            url = url.rstrip("/") + "/json"
+        data = http_json(url)
+        return parse_paste(data.get("paste", "") if isinstance(data, dict) else str(data))
+    return None
+
+
+def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | None,
+            now: datetime, stream: str) -> dict | None:
+    """Build a payload from RK9, or None if Wolfe isn't in this tournament's Masters pairings."""
+    pod = int(os.environ.get("RK9_POD") or rk9.MASTERS_POD)
+    swiss = int(os.environ.get("RK9_SWISS_ROUNDS") or 0) or None
+    cut = int(os.environ.get("RK9_TOP_CUT") or 8)
+    rounds = rk9.scrape(rk9_id, pod, previous, player_name)
+    if not rounds:
+        return None
+    details, standings, pairings, me = rk9.build_inputs(
+        rk9_id, name or os.environ.get("RK9_EVENT_NAME") or rk9_id, rounds, player_name, previous, swiss, cut)
+    if not me:
+        return None
+    payload = build_payload(rk9_id, details, standings, pairings, me, previous, now, stream)
+
+    # Remember each opponent's latest record so OPW works after they leave the pairings.
+    records = {s["player"]: s["record"] for s in standings}
+    for m in payload["matches"]:
+        if m["opponentId"] in records:
+            m["opponentRecord"] = records[m["opponentId"]]
+    payload["source"] = "rk9"
+    payload["tournamentUrl"] = f"{rk9.RK9}/tournament/{rk9_id}"
+    payload["players"] = None
+    payload["team"] = team_override() or rk9.team_from_payload(previous, rk9_id)
+    if not (previous and previous.get("tournamentId") == rk9_id and previous.get("roundKey") == payload["roundKey"]):
+        # A new round just went up: let it play out before scraping again.
+        snooze = int(os.environ.get("RK9_SNOOZE_MINUTES") or 40)
+        payload["snoozeUntil"] = (now + timedelta(minutes=snooze)).isoformat().replace("+00:00", "Z")
+    else:
+        payload["snoozeUntil"] = None
+    return payload
+
+
+def snoozed(previous: dict | None, now: datetime) -> bool:
+    until = parse_date((previous or {}).get("snoozeUntil"))
+    return bool(previous and previous.get("source") == "rk9" and until and now < until)
+
+
 def main() -> int:
     gist_id = os.environ.get("GIST_ID", "").strip()
     token = os.environ.get("GH_PAT", "").strip()
@@ -412,29 +487,55 @@ def main() -> int:
         return 1
 
     tournament_id = os.environ.get("TOURNAMENT_ID", "").strip() or None
+    rk9_id = os.environ.get("RK9_TOURNAMENT_ID", "").strip() or None
     player_id = os.environ.get("PLAYER_ID", "").strip() or None
     player_name = os.environ.get("PLAYER_NAME", "").strip() or DEFAULT_PLAYER_NAME
     stream = os.environ.get("STREAM_URL", "").strip() or DEFAULT_STREAM_URL
     lookback = int(os.environ.get("LOOKBACK_DAYS") or 3)
     now = datetime.now(timezone.utc).replace(microsecond=0)
-
-    if tournament_id:
-        standings = limitless(f"/tournaments/{tournament_id}/standings") or []
-        me = find_player(standings, player_id, player_name)
-        if not me:
-            print(f"error: {player_id or player_name} not found in tournament {tournament_id}", file=sys.stderr)
-            return 1
-    else:
-        tournament_id, standings, me = discover_tournament(player_id, player_name, now, lookback)
-        if not tournament_id:
-            print(f"No VGC tournament in the last {lookback} days includes {player_id or player_name}; gist left as is.")
-            return 0
-
-    details = limitless(f"/tournaments/{tournament_id}/details") or {}
-    pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
     previous = read_previous_payload(gist_id, token) if gist_id and token else None
 
-    payload = build_payload(tournament_id, details, standings, pairings, me, previous, now, stream)
+    payload = None
+    if not tournament_id:
+        # RK9 (Regionals, ICs, Worlds) first: an explicit id, or an event running today.
+        if snoozed(previous, now) and os.environ.get("FORCE") != "1":
+            print(f"RK9 scraping snoozed until {previous['snoozeUntil']}; gist left as is.")
+            return 0
+        rk9_name = None
+        if not rk9_id:
+            try:
+                found = rk9.discover_vg_tournament(now.date())
+            except RuntimeError as err:
+                print(f"warning: RK9 discovery failed: {err}", file=sys.stderr)
+                found = None
+            if found:
+                rk9_id, rk9_name = found
+        if rk9_id:
+            payload = run_rk9(rk9_id, rk9_name, player_name, previous, now, stream)
+            if payload is None and os.environ.get("RK9_TOURNAMENT_ID"):
+                print(f"error: {player_name} not found in RK9 tournament {rk9_id}", file=sys.stderr)
+                return 1
+            if payload is None:
+                print(f"{player_name} is not in RK9 tournament {rk9_id}; trying Limitless.")
+
+    if payload is None:
+        if tournament_id:
+            standings = limitless(f"/tournaments/{tournament_id}/standings") or []
+            me = find_player(standings, player_id, player_name)
+            if not me:
+                print(f"error: {player_id or player_name} not found in tournament {tournament_id}", file=sys.stderr)
+                return 1
+        else:
+            tournament_id, standings, me = discover_tournament(player_id, player_name, now, lookback)
+            if not tournament_id:
+                print(f"No VGC tournament in the last {lookback} days includes {player_id or player_name}; gist left as is.")
+                return 0
+        details = limitless(f"/tournaments/{tournament_id}/details") or {}
+        pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
+        payload = build_payload(tournament_id, details, standings, pairings, me, previous, now, stream)
+        payload["source"] = "limitless"
+        if override := team_override():
+            payload["team"] = override
 
     if dry_run:
         print(json.dumps(payload, indent=2))
