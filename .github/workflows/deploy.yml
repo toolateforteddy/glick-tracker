@@ -27,6 +27,8 @@ jobs:
         env:
           # Optional repo variable; the app falls back to the project gist when unset.
           VITE_GIST_RAW_URL: ${{ vars.VITE_GIST_RAW_URL }}
+          # Optional repo variable; page-view counting stays off when unset.
+          VITE_GOATCOUNTER_CODE: ${{ vars.VITE_GOATCOUNTER_CODE }}
         run: npm ci && npm run build
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
