@@ -9,6 +9,7 @@ pairings) so update_tracker.build_payload can do the rest.
 
 from __future__ import annotations
 
+import math
 import re
 import time
 import urllib.error
@@ -409,3 +410,62 @@ def team_from_payload(previous: dict | None, tournament_id: str) -> list[dict]:
     if previous and previous.get("tournamentId") == tournament_id:
         return previous.get("team") or []
     return []
+
+
+# ------------------------------------------------------------- Top cut projection
+#
+# RK9 doesn't publish the round count or cut. Under the current Championship Series format,
+# Day 1 Swiss is followed by more Swiss rounds on Day 2 for the players who made it, then an
+# "asymmetrical" top 8: everyone with the same record as 8th place gets in. Wolfe's chances
+# are projected from the field that is still playing, not decided by tiebreakers.
+
+
+def estimate_swiss_rounds(players: int | None, active: int) -> int | None:
+    """Total Swiss rounds, or None while Day 1 is still on (Day 2 size unknown yet).
+
+    Day 1 is 9 rounds for 800+ players (Louisville 2027) and 8 below that. Day 2 is taken to
+    run until about 8 players could still be undefeated on the day.
+    """
+    if not players or active >= players / 3:
+        return None
+    day1 = 9 if players >= 800 else 8
+    return day1 + max(1, math.ceil(math.log2(max(active, 2) / 8)))
+
+
+def projected_cut_line(points: list[int], remaining: int, cut: int = 8) -> int | None:
+    """Match points the `cut`-th player is expected to finish on.
+
+    Assumes points-paired Swiss where each score group splits evenly every round.
+    """
+    groups: dict[int, float] = {}
+    for pts in points:
+        groups[pts] = groups.get(pts, 0) + 1
+    for _ in range(remaining):
+        nxt: dict[int, float] = {}
+        for pts, n in groups.items():
+            nxt[pts + 3] = nxt.get(pts + 3, 0) + n / 2
+            nxt[pts] = nxt.get(pts, 0) + n / 2
+        groups = nxt
+    total = 0.0
+    for p in sorted(groups, reverse=True):
+        total += groups[p]
+        if total >= cut - 1e-9:
+            return int(p)
+    return None
+
+
+def cut_status(my_points: int, my_losses: int, field: list[int], players: int | None,
+               played: int, swiss_override: int | None, cut: int = 8) -> str | None:
+    """'alive', 'bubble' (must win out) or 'eliminated' while Swiss is running; None if unknown."""
+    total = swiss_override or estimate_swiss_rounds(players, len(field))
+    if total is None:
+        # Day 1: no Day 2 cut has ever let a 4-loss player through.
+        return "eliminated" if my_losses >= 4 else None
+    remaining = max(0, total - played)
+    line = projected_cut_line(field, remaining, cut)
+    if line is None:
+        return None
+    best = my_points + 3 * remaining
+    if best < line:
+        return "eliminated"
+    return "bubble" if best == line else "alive"

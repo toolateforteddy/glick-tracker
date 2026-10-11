@@ -107,6 +107,28 @@ class ParseTest(unittest.TestCase):
             self.assertIsNone(rk9.discover_vg_tournament(date(2026, 10, 13)))
 
 
+class CutProjectionTest(unittest.TestCase):
+    # Field entering Louisville 2027 round 11 (points: count), from the live page.
+    FIELD = [30] + [27] * 10 + [24] * 44 + [21] * 60 + [18] * 25
+
+    def test_estimate_rounds(self):
+        self.assertIsNone(rk9.estimate_swiss_rounds(1099, 900))  # still Day 1
+        self.assertEqual(rk9.estimate_swiss_rounds(1099, 140), 14)
+        self.assertEqual(rk9.estimate_swiss_rounds(500, 60), 11)
+
+    def test_cut_line(self):
+        self.assertEqual(rk9.projected_cut_line(self.FIELD, 4), 33)  # 11-3 after 14 rounds
+        self.assertEqual(rk9.projected_cut_line(self.FIELD, 3), 33)  # 11-2 after 13 rounds
+
+    def test_status(self):
+        # Wolfe 7-3 after 10: needs to win out if Swiss runs 14, out if it runs 13.
+        self.assertEqual(rk9.cut_status(21, 3, self.FIELD, 1099, 10, None), "bubble")
+        self.assertEqual(rk9.cut_status(21, 3, self.FIELD, 1099, 10, 13), "eliminated")
+        self.assertEqual(rk9.cut_status(24, 2, self.FIELD, 1099, 10, None), "alive")
+        self.assertEqual(rk9.cut_status(12, 4, [12] * 900, 1099, 8, None), "eliminated")
+        self.assertIsNone(rk9.cut_status(15, 3, [15] * 900, 1099, 8, None))
+
+
 class RunTest(unittest.TestCase):
     def fake_fetch(self, path):
         if "rnd=" in path:
