@@ -34,7 +34,7 @@ export function RecordCard({ data, wide = false }: { data: TrackerPayload; wide?
 
         <dl className={`mt-5 grid grid-cols-2 gap-3 ${wide ? 'lg:mt-3 lg:flex-1' : ''}`}>
           <Stat label={data.source === 'rk9' ? 'Est. rank' : 'Rank'} value={data.standing != null ? `#${data.standing}` : '—'} />
-          <Stat label="OPW%" value={data.opw != null ? `${data.opw.toFixed(2)}%` : '—'} />
+          <Stat label="Resistance" value={data.opw != null ? `${data.opw.toFixed(2)}%` : '—'} />
         </dl>
       </div>
 
