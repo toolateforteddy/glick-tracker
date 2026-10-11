@@ -497,6 +497,18 @@ def weekend_over(now: datetime) -> datetime:
     return monday if monday > now else monday + timedelta(days=7)
 
 
+def wolfe_done(payload: dict) -> bool:
+    """His event is over for him: it finished, he dropped, or he lost in top cut.
+
+    Missing a cut isn't detected here on purpose (cut sizes are guesses for RK9); he simply
+    stops appearing in pairings and the idle back-off takes over.
+    """
+    if payload.get("phase") == "finished" or str(payload.get("status") or "").startswith("Dropped"):
+        return True
+    cut = [m for m in payload.get("matches") or [] if m.get("phase") == "topcut"]
+    return payload.get("phase") == "topcut" and bool(cut) and cut[-1].get("result") == "L"
+
+
 def idle_snooze(previous: dict | None, now: datetime) -> dict:
     """snoozeUntil/idleSince for a run that found nothing live to track."""
     since = parse_date((previous or {}).get("idleSince")) or now
@@ -571,8 +583,9 @@ def main() -> int:
         if override := team_override():
             payload["team"] = override
 
-    if payload.get("phase") == "finished":
-        payload.update(idle_snooze(previous, now))
+    if wolfe_done(payload):
+        # Nothing more to follow this weekend; the next event starts the cycle again.
+        payload["snoozeUntil"] = weekend_over(now).isoformat().replace("+00:00", "Z")
 
     if dry_run:
         print(json.dumps(payload, indent=2))
