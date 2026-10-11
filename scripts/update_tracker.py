@@ -44,7 +44,7 @@ OPW_FLOOR = 0.25  # Pokémon tiebreaker rules floor each opponent's win rate at 
 def http_json(url: str, *, method: str = "GET", headers: dict[str, str] | None = None, body: Any = None) -> Any:
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method)
-    req.add_header("User-Agent", "glick-tracker/1.0")
+    req.add_header("User-Agent", rk9.USER_AGENT)
     req.add_header("Accept", "application/json")
     if data is not None:
         req.add_header("Content-Type", "application/json")
