@@ -181,17 +181,18 @@ def scrape_rounds(tournament_id: str, html: str, my_id: str,
     # The bracket starts at the first bye-free round of 8 or fewer matches after a Swiss round:
     # Swiss rounds of a Regional are far wider than a Top 16.
     swiss_rounds = cut_size = None
-    for (_, prev_n, _), (rnd, n, _) in zip(played, played[1:]):
+    for (_, prev_n, _), (rnd, n, _) in zip(played, played[1:], strict=False):
         if 0 < n <= 8 and (prev_n == 0 or prev_n > 8):
             swiss_rounds, cut_size = rnd - 1, 2 * n
             break
 
     rows = []
     for rnd, _, m in played:
-        in_cut = swiss_rounds is not None and rnd > swiss_rounds
-        label = bracket_label(max(2, cut_size >> (rnd - swiss_rounds - 1))) if in_cut else f"R{rnd}"
-        rows.append({"round": rnd, "phase": "topcut" if in_cut else "swiss", "label": label,
-                     **m, "score": None})
+        if swiss_rounds is not None and cut_size is not None and rnd > swiss_rounds:
+            phase, label = "topcut", bracket_label(max(2, cut_size >> (rnd - swiss_rounds - 1)))
+        else:
+            phase, label = "swiss", f"R{rnd}"
+        rows.append({"round": rnd, "phase": phase, "label": label, **m, "score": None})
     return rows, swiss_rounds, cut_size
 
 
