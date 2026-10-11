@@ -1,7 +1,7 @@
 import { CircleDot } from 'lucide-react'
 import { useState } from 'react'
 import { fallbackSpriteUrl, spriteUrl } from '../lib/sprites'
-import { teraClass } from '../lib/types-colors'
+import { moveClass, teraClass } from '../lib/types-colors'
 import type { TeamMember } from '../types'
 
 export function TeamGrid({ team }: { team: TeamMember[] }) {
@@ -77,7 +77,10 @@ function PokemonCard({ mon }: { mon: TeamMember }) {
       </div>
       <ul className="mt-3 grid grid-cols-2 gap-1.5">
         {Array.from({ length: 4 }, (_, i) => mon.moves[i]).map((move, i) => (
-          <li key={i} className="truncate rounded-xl bg-slate-800/70 px-2.5 py-1.5 text-sm text-slate-200">
+          <li
+            key={i}
+            className={`truncate rounded-xl px-2.5 py-1.5 text-sm ${move ? `font-medium ${moveClass(move)}` : 'bg-slate-800/70'}`}
+          >
             {move || <span className="text-slate-600">—</span>}
           </li>
         ))}
