@@ -1,5 +1,6 @@
 import { ExternalLink, Hourglass, Timer } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { sourceLink, wolfeOut } from '../lib/status'
 import { useNow } from '../lib/usePolling'
 import type { TrackerPayload } from '../types'
 
@@ -8,17 +9,16 @@ const STALE_AFTER_MIN = 75
 
 export function RoundTimer({ data }: { data: TrackerPayload }) {
   const now = useNow(1000)
-  // Our data lags by design (we poll gently), so point viewers at the source for the freshest view.
-  const link =
-    data.source === 'rk9' && data.tournamentId
-      ? { href: `https://rk9.gg/pairings/${data.tournamentId}`, label: 'View live pairings on RK9' }
-      : data.tournamentUrl
-        ? { href: data.tournamentUrl, label: 'View live standings on Limitless' }
-        : null
+  const link = sourceLink(data)
   const started = data.roundStartedAt ? Date.parse(data.roundStartedAt) : NaN
   const elapsedMs = now - started
   const showTimer =
     data.currentMatchPending !== false && Number.isFinite(started) && elapsedMs >= 0 && elapsedMs < STALE_AFTER_MIN * 60_000
+
+  if (wolfeOut(data)) {
+    // No more rounds for him to time; keep only the way out to the full pairings.
+    return link ? <LinkButton link={link} /> : null
+  }
 
   if (!data.currentMatchPending && data.phase !== 'swiss' && data.phase !== 'topcut') {
     return (
@@ -72,17 +72,21 @@ function Shell({ children, link }: { children: ReactNode; link: { href: string; 
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">Round Timer</h2>
       <div className="mt-3 flex items-center gap-3">{children}</div>
-      {link && (
-        <a
-          href={link.href}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-slate-800 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700"
-        >
-          <ExternalLink className="size-4" />
-          {link.label}
-        </a>
-      )}
+      {link && <LinkButton link={link} className="mt-4" />}
     </section>
+  )
+}
+
+function LinkButton({ link, className = '' }: { link: { href: string; label: string }; className?: string }) {
+  return (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noreferrer"
+      className={`inline-flex items-center gap-1.5 rounded-full bg-slate-800 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 ${className}`}
+    >
+      <ExternalLink className="size-4" />
+      {link.label}
+    </a>
   )
 }
