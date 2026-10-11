@@ -274,7 +274,7 @@ def build_inputs(
                 continue
             cached_rounds.add(rnd)
             pairings.append({
-                "round": rnd, "phase": phase_of(rnd), "table": row.get("table"),
+                "round": rnd, "phase": phase_of(rnd), "table": None,
                 "player1": my_id, "player2": row.get("opponentId") or "",
                 "winner": _result_from_previous(row, my_id),
             })

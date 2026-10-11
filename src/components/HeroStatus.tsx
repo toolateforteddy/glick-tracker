@@ -1,4 +1,4 @@
-import { Radio, Table2, Trophy, Tv } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import type { TrackerPayload } from '../types'
 
 export function HeroStatus({ data }: { data: TrackerPayload }) {
@@ -31,25 +31,6 @@ export function HeroStatus({ data }: { data: TrackerPayload }) {
           )}
           {data.status}
         </span>
-
-        {data.table != null && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800 px-3 py-1.5 text-sm font-semibold text-slate-200">
-            <Table2 className="size-4 text-sky-400" />
-            Table {data.table}
-          </span>
-        )}
-
-        {data.stream && (
-          <a
-            href={data.stream}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full bg-purple-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-purple-500"
-          >
-            {live ? <Radio className="size-4" /> : <Tv className="size-4" />}
-            Watch stream
-          </a>
-        )}
       </div>
     </section>
   )

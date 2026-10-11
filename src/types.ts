@@ -13,7 +13,6 @@ export interface MatchRow {
   round: number
   phase: 'swiss' | 'topcut'
   label: string
-  table: number | null
   opponent: string | null
   opponentId: string | null
   result: MatchResult | null
@@ -34,7 +33,6 @@ export interface TrackerPayload {
   players?: number | null
   record: { w: number; l: number; t?: number }
   standing: number | null
-  table: number | null
   opw: number | null
   topCutAlive: boolean
   topCutStatus?: TopCutStatus

@@ -302,7 +302,6 @@ def build_payload(
                 "round": int(p.get("round") or 0),
                 "phase": "swiss" if is_swiss(p) else "topcut",
                 "label": label_for(p),
-                "table": p.get("table"),
                 "opponent": (by_player.get(opp) or {}).get("name") or opp,
                 "opponentId": opp,
                 "result": result,
@@ -370,7 +369,6 @@ def build_payload(
             started_at = now.isoformat().replace("+00:00", "Z")
 
     record = me.get("record") or {}
-    table = current["table"] if current else (matches[-1]["table"] if matches else None)
 
     return {
         "updatedAt": now.isoformat().replace("+00:00", "Z"),
@@ -390,7 +388,6 @@ def build_payload(
             "t": int(record.get("ties") or 0),
         },
         "standing": me.get("placing"),
-        "table": table,
         "opw": compute_opw(opponents, by_player),
         "topCutAlive": cut_status != "eliminated",
         "topCutStatus": cut_status,

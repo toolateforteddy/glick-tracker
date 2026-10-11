@@ -11,7 +11,7 @@
   "players": 812,
   "record": { "w": 5, "l": 1, "t": 0 },
   "standing": 42,
-  "table": 18,
+  
   "opw": 61.45,
   "topCutAlive": true,
   "topCutStatus": "alive",
@@ -27,12 +27,12 @@
     { "species": "Amoonguss", "item": "Rocky Helmet", "ability": "Regenerator", "tera": "Water", "moves": ["Spore", "Rage Powder", "Pollen Puff", "Protect"] }
   ],
   "matches": [
-    { "round": 1, "phase": "swiss", "label": "R1", "table": 12, "opponent": "Player A", "opponentId": "a", "result": "W", "score": "2-0" },
-    { "round": 2, "phase": "swiss", "label": "R2", "table": 4, "opponent": "Player B", "opponentId": "b", "result": "W", "score": "2-1" },
-    { "round": 3, "phase": "swiss", "label": "R3", "table": 9, "opponent": "Player C", "opponentId": "c", "result": "L", "score": "1-2" },
-    { "round": 4, "phase": "swiss", "label": "R4", "table": 22, "opponent": "Player D", "opponentId": "d", "result": "W", "score": null },
-    { "round": 5, "phase": "swiss", "label": "R5", "table": 15, "opponent": "Player E", "opponentId": "e", "result": "W", "score": "2-0" },
-    { "round": 6, "phase": "swiss", "label": "R6", "table": 7, "opponent": "Player F", "opponentId": "f", "result": "W", "score": "2-1" },
-    { "round": 7, "phase": "swiss", "label": "R7", "table": 18, "opponent": "Player G", "opponentId": "g", "result": null, "score": null }
+    { "round": 1, "phase": "swiss", "label": "R1", "opponent": "Player A", "opponentId": "a", "result": "W", "score": "2-0" },
+    { "round": 2, "phase": "swiss", "label": "R2", "opponent": "Player B", "opponentId": "b", "result": "W", "score": "2-1" },
+    { "round": 3, "phase": "swiss", "label": "R3", "opponent": "Player C", "opponentId": "c", "result": "L", "score": "1-2" },
+    { "round": 4, "phase": "swiss", "label": "R4", "opponent": "Player D", "opponentId": "d", "result": "W", "score": null },
+    { "round": 5, "phase": "swiss", "label": "R5", "opponent": "Player E", "opponentId": "e", "result": "W", "score": "2-0" },
+    { "round": 6, "phase": "swiss", "label": "R6", "opponent": "Player F", "opponentId": "f", "result": "W", "score": "2-1" },
+    { "round": 7, "phase": "swiss", "label": "R7", "opponent": "Player G", "opponentId": "g", "result": null, "score": null }
   ]
 }
