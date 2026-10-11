@@ -264,7 +264,8 @@ def build_inputs(
     def phase_of(rnd: int) -> int:
         return 2 if swiss_rounds and rnd > swiss_rounds else 1
 
-    phases = [{"phase": 1, "type": "SWISS", "rounds": swiss_rounds or latest_round}]
+    # With the round count unknown, never let a finished round read as the end of the event.
+    phases = [{"phase": 1, "type": "SWISS", "rounds": swiss_rounds or latest_round + 1}]
     if swiss_rounds and cut_size:
         phases.append({"phase": 2, "type": "SINGLE_ELIMINATION", "rounds": cut_size.bit_length() - 1})
     details = {"name": name, "phases": phases}

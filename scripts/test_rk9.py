@@ -185,6 +185,15 @@ class RunTest(unittest.TestCase):
         self.assertFalse(p["currentMatchPending"])
         self.assertTrue(ut.wolfe_done(p))
 
+    def test_round_finished_between_pairings_is_not_the_end(self):
+        r2_page = page({1: R1, 2: R2})
+        with mock.patch.object(rk9, "fetch", side_effect=lambda path: r2_page if "rnd" not in path else "".join(R1)):
+            p = ut.run_rk9("LO002", "L", "Wolfe Glick", None, NOW, "s")
+        self.assertEqual(p["phase"], "swiss")
+        self.assertEqual(p["status"], "Round 2 Swiss")
+        self.assertFalse(p["currentMatchPending"])
+        self.assertFalse(ut.wolfe_done(p))
+
     def test_not_in_an_event_he_never_played(self):
         with mock.patch.object(rk9, "fetch", return_value=page({1: [match(1, ("Bob B", "0-0-0"), ("Cara C", "0-0-0"))]})):
             self.assertIsNone(ut.run_rk9("LO002", "L", "Wolfe Glick", None, NOW, "s"))
