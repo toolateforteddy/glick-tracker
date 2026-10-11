@@ -3,6 +3,7 @@ import { HeroStatus } from './components/HeroStatus'
 import { RecordCard } from './components/RecordCard'
 import { RoundLog } from './components/RoundLog'
 import { RoundTimer } from './components/RoundTimer'
+import { Socials } from './components/Socials'
 import { TeamGrid } from './components/TeamGrid'
 import { usePolling } from './lib/usePolling'
 
@@ -68,6 +69,10 @@ export default function App() {
           <TeamGrid team={data.team ?? []} />
         </main>
       )}
+
+      <div className="mt-8">
+        <Socials />
+      </div>
 
       <footer className="mt-10 text-center text-xs text-slate-600">
         Fan-made tracker. Data from {data?.source === 'rk9' ? 'RK9' : 'Limitless VGC'}, sprites from Pokémon Showdown.
