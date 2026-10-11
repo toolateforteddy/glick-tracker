@@ -29,7 +29,7 @@ export default function App() {
           <h1 className="text-2xl font-black tracking-tight sm:text-4xl">
             The Glick Tracker
           </h1>
-          <p className="text-sm text-slate-400">Following Wolfe Glick's Pokémon tournaments live</p>
+          <p className="text-sm text-slate-400">Live VGC tournament tracking for Wolfe Glick</p>
           {live && data && <Updated at={data.updatedAt} fetched={lastFetched} className="mt-2 sm:hidden" />}
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2 pt-1 sm:pt-0">
