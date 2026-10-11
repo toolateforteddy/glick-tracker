@@ -14,7 +14,7 @@ export function HeroStatus({ data }: { data: TrackerPayload }) {
         ) : (
           <span>{data.tournament}</span>
         )}
-        {data.players ? <span className="text-slate-500">· {data.players} players</span> : null}
+        {data.players ? <span className="text-slate-500">· {data.players.toLocaleString('en-US')} players</span> : null}
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">

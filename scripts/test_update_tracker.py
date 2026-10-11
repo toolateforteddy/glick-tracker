@@ -2,6 +2,7 @@
 
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 import update_tracker as ut
 
@@ -97,6 +98,48 @@ class BuildPayloadTest(unittest.TestCase):
         pairings = self.pairings[:1] + [{"round": 2, "phase": 1, "player1": "wolfe", "player2": ""}]
         p = self.build(pairings=pairings)
         self.assertEqual(p["matches"][1]["result"], "BYE")
+
+
+class IdleBackoffTest(unittest.TestCase):
+    ENV = {"GIST_ID": "g", "GH_PAT": "t", "RK9_TOURNAMENT_ID": "", "TOURNAMENT_ID": ""}
+
+    def run_main(self, previous, discovered=None):
+        fixed = datetime(2026, 10, 11, 18, 0, 30, tzinfo=timezone.utc)
+        with mock.patch.dict("os.environ", self.ENV), \
+             mock.patch.object(ut, "datetime", wraps=datetime) as dt, \
+             mock.patch.object(ut, "read_previous_payload", return_value=previous), \
+             mock.patch.object(ut.rk9, "discover_vg_tournament", return_value=discovered) as disc, \
+             mock.patch.object(ut, "discover_tournament", return_value=(None, [], None)), \
+             mock.patch.object(ut, "write_payload") as write:
+            dt.now.return_value = fixed
+            self.assertEqual(ut.main(), 0)
+        return disc, write
+
+    def test_not_found_backs_off_an_hour(self):
+        disc, write = self.run_main({"tournament": "Old", "record": {"w": 1, "l": 0}})
+        disc.assert_called_once()
+        written = write.call_args.args[2]
+        self.assertEqual(written["snoozeUntil"], "2026-10-11T19:00:30Z")
+        self.assertEqual(written["tournament"], "Old")  # last payload kept for the page
+        self.assertEqual(written["idleSince"], "2026-10-11T18:00:30Z")
+
+    def test_gives_up_for_the_weekend_after_six_hours(self):
+        # 18:00:30 Sunday; idle since 12:00 -> stop until Monday 06:00 UTC.
+        _, write = self.run_main({"idleSince": "2026-10-11T12:00:00Z", "snoozeUntil": "2026-10-11T18:00:00Z"})
+        written = write.call_args.args[2]
+        self.assertEqual(written["snoozeUntil"], "2026-10-12T06:00:00Z")
+        self.assertEqual(written["idleSince"], "2026-10-11T12:00:00Z")
+
+    def test_weekend_over(self):
+        sat = datetime(2026, 10, 10, 13, 0, tzinfo=timezone.utc)
+        early_mon = datetime(2026, 10, 12, 2, 0, tzinfo=timezone.utc)
+        self.assertEqual(ut.weekend_over(sat), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
+        self.assertEqual(ut.weekend_over(early_mon), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
+
+    def test_snoozed_run_makes_no_requests(self):
+        disc, write = self.run_main({"snoozeUntil": "2026-10-11T18:30:00Z"})
+        disc.assert_not_called()
+        write.assert_not_called()
 
 
 if __name__ == "__main__":
