@@ -12,6 +12,8 @@ Environment:
   LOOKBACK_DAYS    (optional) how far back discovery looks, default 3
   IDLE_SNOOZE_MINUTES (optional) back-off when Wolfe is in no live event, default 60
   DRY_RUN          (optional) "1" prints the payload instead of patching the gist
+  LOOP_MINUTES     (optional) keep syncing for this long, every SYNC_EVERY_MINUTES (default 10),
+                   sleeping through snoozes; GitHub's cron is too unreliable to drive this alone
 
 Only the standard library is used so the workflow needs no pip install.
 """
@@ -22,6 +24,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -530,13 +533,14 @@ def idle_snooze(previous: dict | None, now: datetime) -> dict:
     return {"snoozeUntil": until, "idleSince": since.isoformat().replace("+00:00", "Z")}
 
 
-def main() -> int:
+def sync_once() -> tuple[int, str | None]:
+    """One sync pass: the exit code and the snoozeUntil it left in the gist, if any."""
     gist_id = os.environ.get("GIST_ID", "").strip()
     token = os.environ.get("GH_PAT", "").strip()
     dry_run = os.environ.get("DRY_RUN") == "1"
     if not dry_run and not (gist_id and token):
         print("error: GIST_ID and GH_PAT are required", file=sys.stderr)
-        return 1
+        return 1, None
 
     tournament_id = os.environ.get("TOURNAMENT_ID", "").strip() or None
     rk9_id = os.environ.get("RK9_TOURNAMENT_ID", "").strip() or None
@@ -552,7 +556,7 @@ def main() -> int:
         # RK9 (Regionals, ICs, Worlds) first: an explicit id, or an event running today.
         if previous and snoozed(previous, now) and os.environ.get("FORCE") != "1":
             print(f"Scraping snoozed until {previous['snoozeUntil']}; gist left as is.")
-            return 0
+            return 0, previous["snoozeUntil"]
         rk9_name = None
         if not rk9_id:
             try:
@@ -566,7 +570,7 @@ def main() -> int:
             payload = run_rk9(rk9_id, rk9_name, player_name, previous, now, stream)
             if payload is None and os.environ.get("RK9_TOURNAMENT_ID"):
                 print(f"error: {player_name} not found in RK9 tournament {rk9_id}", file=sys.stderr)
-                return 1
+                return 1, None
             if payload is None:
                 print(f"{player_name} is not in RK9 tournament {rk9_id}; trying Limitless.")
 
@@ -576,7 +580,7 @@ def main() -> int:
             me = find_player(standings, player_id, player_name)
             if not me:
                 print(f"error: {player_id or player_name} not found in tournament {tournament_id}", file=sys.stderr)
-                return 1
+                return 1, None
         else:
             tournament_id, standings, me = discover_tournament(player_id, player_name, now, lookback)
             if not tournament_id:
@@ -586,7 +590,7 @@ def main() -> int:
                       f"next check after {idle['snoozeUntil']}.")
                 if not dry_run and gist_id and token:
                     write_payload(gist_id, token, {**(previous or {}), **idle})
-                return 0
+                return 0, idle["snoozeUntil"]
         details = limitless(f"/tournaments/{tournament_id}/details") or {}
         pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
         payload = build_payload(tournament_id, details, standings, pairings, me, previous, now, stream)
@@ -600,11 +604,35 @@ def main() -> int:
 
     if dry_run:
         print(json.dumps(payload, indent=2))
-        return 0
+        return 0, payload.get("snoozeUntil")
     write_payload(gist_id, token, payload)
     print(f"Updated gist {gist_id}: {payload['tournament']} · {payload['status']} · "
           f"{payload['record']['w']}-{payload['record']['l']}-{payload['record']['t']}")
-    return 0
+    return 0, payload.get("snoozeUntil")
+
+
+def main() -> int:
+    loop = timedelta(minutes=int(os.environ.get("LOOP_MINUTES") or 0))
+    every = timedelta(minutes=int(os.environ.get("SYNC_EVERY_MINUTES") or 10))
+    deadline = datetime.now(timezone.utc) + loop
+    while True:
+        try:
+            code, until = sync_once()
+        except Exception as err:  # one bad fetch shouldn't end a long loop
+            if not loop:
+                raise
+            print(f"warning: sync failed: {err!r}", file=sys.stderr)
+            code, until = 1, None
+        if not loop:
+            return code
+        # Sleep through any snooze rather than waking just to read the gist.
+        now = datetime.now(timezone.utc)
+        wake = max(now + every, parse_date(until) or now)
+        if wake >= deadline:
+            print("Nothing more to do before this run ends.")
+            return 0
+        print(f"Next check at {wake.isoformat(timespec='seconds')}.", flush=True)
+        time.sleep((wake - now).total_seconds())
 
 
 if __name__ == "__main__":

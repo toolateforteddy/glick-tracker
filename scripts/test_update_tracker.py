@@ -1,7 +1,7 @@
 """Offline tests for update_tracker.build_payload. Run: python3 -m unittest discover scripts"""
 
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 import update_tracker as ut
@@ -149,6 +149,41 @@ class IdleBackoffTest(unittest.TestCase):
         disc, write = self.run_main({"snoozeUntil": "2026-10-11T18:30:00Z"})
         disc.assert_not_called()
         write.assert_not_called()
+
+
+class LoopTest(unittest.TestCase):
+    def run_loop(self, results, minutes="60"):
+        clock = [datetime(2026, 10, 11, 18, 0, tzinfo=timezone.utc)]
+
+        def sleep(seconds):
+            clock[0] += timedelta(seconds=seconds)
+
+        with mock.patch.dict("os.environ", {"LOOP_MINUTES": minutes}), \
+             mock.patch.object(ut, "datetime", wraps=datetime) as dt, \
+             mock.patch.object(ut, "sync_once", side_effect=results) as once, \
+             mock.patch.object(ut.time, "sleep", side_effect=sleep) as slept:
+            dt.now.side_effect = lambda tz=None: clock[0]
+            self.assertEqual(ut.main(), 0)
+        return once, slept
+
+    def test_checks_every_ten_minutes_until_the_run_ends(self):
+        once, slept = self.run_loop([(0, None)] * 6)
+        self.assertEqual(once.call_count, 6)
+        self.assertEqual([c.args[0] for c in slept.call_args_list], [600.0] * 5)
+
+    def test_sleeps_through_a_snooze(self):
+        once, slept = self.run_loop([(0, "2026-10-11T18:40:00Z"), (0, None), (0, None)])
+        self.assertEqual(slept.call_args_list[0].args[0], 2400.0)
+        self.assertEqual(once.call_count, 3)
+
+    def test_stops_when_snoozed_past_the_end(self):
+        once, slept = self.run_loop([(0, "2026-10-12T06:00:00Z")])
+        once.assert_called_once()
+        slept.assert_not_called()
+
+    def test_a_failed_pass_does_not_end_the_loop(self):
+        once, _ = self.run_loop([RuntimeError("boom")] + [(0, None)] * 5)
+        self.assertEqual(once.call_count, 6)
 
 
 if __name__ == "__main__":

@@ -13,20 +13,26 @@ on:
         description: Scrape RK9 now even if the post-pairings snooze is active
         type: boolean
         default: false
+      loop_minutes:
+        description: Keep checking every 10 minutes for this long (0 = check once)
+        required: false
+        default: '345'
   schedule:
-    # Every 10 minutes during weekend tournament hours (UTC): Sat/Sun 12:00-23:59
-    # plus the late US evening that spills into Sun/Mon 00:00-05:59.
+    # GitHub often skips these, so each run also loops for most of the 6-hour job limit;
+    # whichever cron tick does fire keeps syncing on its own. Weekend tournament hours (UTC):
+    # Sat/Sun 12:00-23:59 plus the late US evening that spills into Sun/Mon 00:00-05:59.
     - cron: '*/10 12-23 * * 6,0'
     - cron: '*/10 0-5 * * 0,1'
 
 concurrency:
   group: sync-tracker
-  cancel-in-progress: false
+  # A newer run (a manual sync or a cron tick) takes over the loop instead of queueing behind it.
+  cancel-in-progress: true
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -45,5 +51,7 @@ jobs:
           PLAYER_ID: ${{ vars.PLAYER_ID }}
           STREAM_URL: ${{ vars.STREAM_URL }}
           LIMITLESS_API_KEY: ${{ secrets.LIMITLESS_API_KEY }}
+          LOOP_MINUTES: ${{ inputs.loop_minutes || '345' }}
+          PYTHONUNBUFFERED: '1'
         run: python scripts/update_tracker.py
 
