@@ -251,7 +251,7 @@ def build_payload(
     stream: str | None,
 ) -> dict:
     my_id = me.get("player")
-    by_player = {s.get("player"): s for s in standings}
+    by_player: dict[Any, dict] = {s.get("player"): s for s in standings}
     swiss_phases, rounds_by_phase, swiss_rounds, cut_size = classify_phases(details)
     if not swiss_phases:
         swiss_phases = {1}
@@ -281,7 +281,8 @@ def build_payload(
         key=lambda p: (int(p.get("phase") or 1), int(p.get("round") or 0)),
     )
 
-    matches, opponents = [], []
+    matches: list[dict[str, Any]] = []
+    opponents: list[str] = []
     for p in mine:
         opp = p.get("player2") if p.get("player1") == my_id else p.get("player1")
         winner = p.get("winner")
@@ -336,7 +337,7 @@ def build_payload(
             status = f"Eliminated in {last_cut['label']}"
         else:
             status = "Top Cut in progress"
-    elif latest:
+    elif latest_key:
         phase, status = "swiss", f"Round {latest_key[1]} Swiss"
     else:
         phase, status = "swiss", "Awaiting Round 1 pairings"
@@ -412,8 +413,8 @@ def parse_paste(text: str) -> list[dict]:
         head, _, item = lines[0].partition(" @ ")
         head = re.sub(r"\((M|F)\)", "", head).strip()
         nick = re.search(r"\(([^)]+)\)\s*$", head)
-        mon = {"species": nick[1] if nick else head, "item": item.strip() or None,
-               "ability": None, "tera": None, "moves": []}
+        mon: dict[str, Any] = {"species": nick[1] if nick else head, "item": item.strip() or None,
+                               "ability": None, "tera": None, "moves": []}
         for line in lines[1:]:
             if line.startswith("Ability:"):
                 mon["ability"] = line.split(":", 1)[1].strip()
@@ -495,7 +496,7 @@ def main() -> int:
     payload = None
     if not tournament_id:
         # RK9 (Regionals, ICs, Worlds) first: an explicit id, or an event running today.
-        if snoozed(previous, now) and os.environ.get("FORCE") != "1":
+        if previous and snoozed(previous, now) and os.environ.get("FORCE") != "1":
             print(f"RK9 scraping snoozed until {previous['snoozeUntil']}; gist left as is.")
             return 0
         rk9_name = None

@@ -35,6 +35,7 @@ MONTHS = {m: i for i, m in enumerate(
 
 class Node:
     __slots__ = ("tag", "attrs", "children", "parent")
+    children: list[Node]
 
     def __init__(self, tag: str, attrs: dict[str, str], parent: Node | None):
         self.tag, self.attrs, self.children, self.parent = tag, attrs, [], parent
@@ -174,7 +175,7 @@ def parse_pairings_page(html: str, pod: int) -> tuple[dict[int, list[dict]], set
     by_round: dict[int, list[dict]] = {}
     for pane in root.find_all(lambda n: bool(ROUND_REF_RE.fullmatch(n.attrs.get("id", "")))):
         m = ROUND_REF_RE.fullmatch(pane.attrs["id"])
-        if int(m[1]) == pod and (found := parse_matches(pane)):
+        if m and int(m[1]) == pod and (found := parse_matches(pane)):
             by_round[int(m[2])] = found
     return by_round, rounds_seen
 
