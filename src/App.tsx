@@ -6,6 +6,7 @@ import { RoundLog } from './components/RoundLog'
 import { RoundTimer } from './components/RoundTimer'
 import { SocialIcons, Socials } from './components/Socials'
 import { TeamGrid } from './components/TeamGrid'
+import { wolfeOut } from './lib/status'
 import { usePolling } from './lib/usePolling'
 
 const DEFAULT_GIST_RAW_URL =
@@ -25,7 +26,7 @@ export default function App() {
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
       <header className="mb-6 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
+          <h1 className="text-2xl font-black tracking-tight sm:text-4xl">
             The Glick Tracker
           </h1>
           <p className="text-sm text-slate-400">Live VGC tournament tracking for Wolfe Glick</p>
@@ -57,15 +58,23 @@ export default function App() {
       ) : (
         <main className="space-y-4">
           <HeroStatus data={data} />
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <div className="min-w-0 space-y-4 lg:col-span-1">
-              <RecordCard data={data} />
-              <RoundTimer data={data} />
-            </div>
-            <div className="min-w-0 lg:col-span-2">
+          {wolfeOut(data) ? (
+            // No timer once his run is over: a wide record card above the log avoids a lopsided gap.
+            <>
+              <RecordCard data={data} wide />
               <RoundLog matches={data.matches} />
+            </>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              <div className="min-w-0 space-y-4 lg:col-span-1">
+                <RecordCard data={data} />
+                <RoundTimer data={data} />
+              </div>
+              <div className="min-w-0 lg:col-span-2">
+                <RoundLog matches={data.matches} />
+              </div>
             </div>
-          </div>
+          )}
           <TeamGrid team={data.team ?? []} />
         </main>
       )}

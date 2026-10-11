@@ -14,7 +14,7 @@ export function RoundLog({ matches }: { matches: MatchRow[] }) {
       {matches.length === 0 ? (
         <p className="mt-3 text-slate-500">No rounds played yet</p>
       ) : (
-        <RoundTable matches={matches} />
+        <RoundTable matches={matches} showGames={matches.some((m) => m.score)} />
       )}
     </section>
   )
