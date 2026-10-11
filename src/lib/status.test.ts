@@ -52,7 +52,8 @@ describe('sourceLink', () => {
 
 describe('displayStatus', () => {
   it('words a finish gently', () => {
-    expect(displayStatus({ ...base, status: 'Eliminated after Round 12', record: { w: 8, l: 4 } })).toBe('Finished 8-4')
+    expect(displayStatus({ ...base, status: 'Eliminated after Round 12' })).toBe('Finished')
+    expect(displayStatus({ ...base, status: 'Finished 8-4' })).toBe('Finished')
     expect(displayStatus({ ...base, status: 'Eliminated in Top 8' })).toBe('Top 8 finish')
     expect(displayStatus(base)).toBe('Round 11 in progress')
   })

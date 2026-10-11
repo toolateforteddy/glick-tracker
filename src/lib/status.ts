@@ -15,8 +15,8 @@ export function wolfeOut(data: TrackerPayload): boolean {
  * better shown as what he achieved than as a loss.
  */
 export function displayStatus(data: TrackerPayload): string {
-  const { w, l, t = 0 } = data.record
-  if (/^Eliminated after Round \d+$/.test(data.status)) return `Finished ${w}-${l}${t ? `-${t}` : ''}`
+  // The record card right below already shows his record, so the headline doesn't repeat it.
+  if (/^(Eliminated after Round \d+|Finished \d+-\d+(-\d+)?)$/.test(data.status)) return 'Finished'
   const cut = data.status.match(/^Eliminated in (.+)$/)
   return cut ? `${cut[1]} finish` : data.status
 }
