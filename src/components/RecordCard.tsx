@@ -3,6 +3,7 @@ import type { TopCutStatus, TrackerPayload } from '../types'
 
 const CUT_STYLES: Record<TopCutStatus, { label: string; cls: string; Icon: typeof ShieldCheck }> = {
   alive: { label: 'Alive', cls: 'bg-amber-500/15 text-amber-300 ring-amber-500/40', Icon: ShieldQuestion },
+  bubble: { label: 'Must Win Out', cls: 'bg-orange-500/15 text-orange-300 ring-orange-500/40', Icon: ShieldQuestion },
   clinched: { label: 'Cut Clinched', cls: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/40', Icon: ShieldCheck },
   eliminated: { label: 'Eliminated', cls: 'bg-rose-500/15 text-rose-300 ring-rose-500/40', Icon: ShieldX },
 }
@@ -38,7 +39,8 @@ export function RecordCard({ data }: { data: TrackerPayload }) {
           <div className="font-bold">{label}</div>
           {data.topCutSize ? (
             <div className="text-xs opacity-80">
-              Top {data.topCutSize} cut{data.swissRounds ? ` after ${data.swissRounds} Swiss rounds` : ''}
+              {data.source === 'rk9' ? 'Projected: t' : 'T'}op {data.topCutSize} cut
+              {data.swissRounds ? ` after ${data.swissRounds} Swiss rounds` : ''}
             </div>
           ) : null}
         </div>

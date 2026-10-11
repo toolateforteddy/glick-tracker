@@ -1,4 +1,4 @@
-export type TopCutStatus = 'alive' | 'clinched' | 'eliminated'
+export type TopCutStatus = 'alive' | 'bubble' | 'clinched' | 'eliminated'
 export type MatchResult = 'W' | 'L' | 'T' | 'BYE'
 
 export interface TeamMember {

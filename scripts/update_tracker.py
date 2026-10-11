@@ -459,6 +459,17 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     for m in payload["matches"]:
         if m["opponentId"] in records:
             m["opponentRecord"] = records[m["opponentId"]]
+    if payload["phase"] == "swiss" and payload.get("topCutStatus") != "clinched":
+        latest = rounds[max(rounds)]
+        field = [match_points(p["record"]) for m in latest for p in (m["p1"], m["p2"]) if p and p["record"]]
+        rec = me.get("record") or {}
+        status = rk9.cut_status(match_points(rec), int(rec.get("losses") or 0), field, info["players"],
+                                games_played(rec), swiss, cut)
+        if status:
+            payload["topCutStatus"] = status
+            payload["topCutAlive"] = status != "eliminated"
+            payload["topCutSize"] = cut
+            payload["swissRounds"] = swiss or rk9.estimate_swiss_rounds(info["players"], len(field))
     payload["source"] = "rk9"
     payload["tournamentUrl"] = f"{rk9.RK9}/tournament/{rk9_id}"
     payload["players"] = info["players"]
