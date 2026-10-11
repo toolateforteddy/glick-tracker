@@ -22,6 +22,19 @@ export function RoundTimer({ data }: { data: TrackerPayload }) {
     )
   }
 
+  if (data.currentMatchPending === false) {
+    // His match this round is reported (or a bye); the next pairings aren't up yet.
+    const bye = data.matches?.at(-1)?.result === 'BYE'
+    return (
+      <Shell>
+        <Hourglass className="size-6 text-slate-500" />
+        <div className="text-slate-300">
+          {bye ? 'Bye this round' : 'Match reported'} - waiting for next pairings
+        </div>
+      </Shell>
+    )
+  }
+
   if (!showTimer) {
     return (
       <Shell>
