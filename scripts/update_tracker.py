@@ -446,11 +446,11 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     pod = int(os.environ.get("RK9_POD") or rk9.MASTERS_POD)
     swiss = int(os.environ.get("RK9_SWISS_ROUNDS") or 0) or None
     cut = int(os.environ.get("RK9_TOP_CUT") or 8)
-    rounds = rk9.scrape(rk9_id, pod, previous, player_name)
+    rounds, info = rk9.scrape(rk9_id, pod, previous, player_name)
     if not rounds:
         return None
     details, standings, pairings, me = rk9.build_inputs(
-        rk9_id, name or os.environ.get("RK9_EVENT_NAME") or rk9_id, rounds, player_name, previous, swiss, cut)
+        rk9_id, name or os.environ.get("RK9_EVENT_NAME") or info["name"] or rk9_id, rounds, player_name, previous, swiss, cut)
     if not me:
         return None
     payload = build_payload(rk9_id, details, standings, pairings, me, previous, now, stream)
@@ -462,7 +462,7 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
             m["opponentRecord"] = records[m["opponentId"]]
     payload["source"] = "rk9"
     payload["tournamentUrl"] = f"{rk9.RK9}/tournament/{rk9_id}"
-    payload["players"] = None
+    payload["players"] = info["players"]
     payload["team"] = team_override() or rk9.team_from_payload(previous, rk9_id)
     if not (previous and previous.get("tournamentId") == rk9_id and previous.get("roundKey") == payload["roundKey"]):
         # A new round just went up: let it play out before scraping again.

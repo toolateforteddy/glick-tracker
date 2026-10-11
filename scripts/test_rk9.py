@@ -8,6 +8,7 @@ import rk9
 import update_tracker as ut
 
 NOW = datetime(2026, 10, 11, 15, 0, tzinfo=timezone.utc)
+rk9.REQUEST_GAP_SECONDS = 0
 
 
 def player(cls, name, rec):
@@ -45,6 +46,50 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(m["p1"]["id"], "wolfeglick")
         self.assertEqual(m["p2"]["record"], {"wins": 1, "losses": 1, "ties": 0})
         self.assertIsNone(m["p1"]["status"])
+
+    def test_live_markup(self):
+        # Trimmed from the live Louisville 2027 page (2026-10-11): a lazy-loaded pane holding only
+        # the header row, and the current round with records in data-* attributes and a bye.
+        html = (
+            '<h4 class="mb-0">2027 Louisville Pokémon VGC Regional Championships</h4>'
+            '<div>Last uploaded: 14 seconds ago — 1099 players</div>'
+            '<a class="nav-link" href="#P2R9-tab">Round 9</a><a class="nav-link" href="#P2R10-tab">Round 10</a>'
+            '<div class="current-tables tab-pane" id="P2R9"><div class="row match no-gutter">'
+            '<div class="col-5 player player1"><strong>Player 1</strong></div><div class="col-2"><strong>Table #</strong></div>'
+            '<div class="col-5 player player2"><strong>Player 2</strong></div></div>'
+            '<div hx-get="/pairings/LO002?pod=2&rnd=9" class="text-center"></div></div>'
+            '<div class="current-tables tab-pane" id="P2R10">'
+            '<div class="row row-cols-3 match no-gutter complete"><div class="col-5 player player1 winner outcome">'
+            '<span class="name">Wolfe<br> Glick [US]<br></span><span class="record" data-wins="7" data-losses="3" '
+            'data-ties="0" data-points="21"></span><br></div><div class="col-2"></div><div class="col-5 player player2"></div></div>'
+            '<div class="row row-cols-3 match no-gutter complete"><div class="col-5 player player1 loser">'
+            '<span class="name">Carson<br> Confer [US]<br></span><span class="record" data-wins="9" data-losses="1" data-ties="0"></span></div>'
+            '<div class="col-2"> Table<br><span class="tablenumber "> 379 </span></div>'
+            '<div class="col-5 player player2 winner outcome result"><span class="name">Paul<br> Chua [US]<br></span>'
+            '<span class="record" data-wins="10" data-losses="0" data-ties="0"></span></div></div></div>')
+        by_round, linked = rk9.parse_pairings_page(html, 2)
+        self.assertEqual(linked, {9, 10})
+        self.assertEqual(list(by_round), [10])  # the header-only pane is not a match
+        bye, m = by_round[10]
+        self.assertEqual(bye["p1"], {"name": "Wolfe Glick", "id": "wolfeglick", "status": "winner",
+                                     "record": {"wins": 7, "losses": 3, "ties": 0}})
+        self.assertIsNone(bye["p2"])
+        self.assertIsNone(bye["table"])
+        self.assertEqual((m["table"], m["p2"]["record"]["wins"]), (379, 10))
+        self.assertEqual(rk9.parse_page_info(html),
+                         {"name": "2027 Louisville Pokémon VGC Regional Championships", "players": 1099})
+
+    def test_fragment_markup(self):
+        # Per-round fragments (?pod=2&rnd=9) print the record as text instead.
+        html = ('<div class="row row-cols-3 match no-gutter complete"><div class="col-5 player player1 loser">'
+                '<span class="name">Wolfe<br> Glick [US]<br></span> (6-3-0) 18 pts <br></div>'
+                '<div class="col-2"> Table<br><span class="tablenumber "> 437 </span><br></div>'
+                '<div class="col-5 player player2 winner"><span class="name">Kimari<br> Gammage [US]<br></span>'
+                ' (7-2-0) 21 pts <br></div></div>')
+        with mock.patch.object(rk9, "fetch", return_value=html):
+            (m,) = rk9.fetch_round("LO002", 2, 9)
+        self.assertEqual((m["table"], m["p1"]["id"], m["p1"]["status"]), (437, "wolfeglick", "loser"))
+        self.assertEqual(m["p1"]["record"], {"wins": 6, "losses": 3, "ties": 0})
 
     def test_date_ranges(self):
         self.assertEqual(rk9.parse_date_range("October 9-11, 2026: 2027 Louisville"),
