@@ -121,6 +121,20 @@ class IdleBackoffTest(unittest.TestCase):
         written = write.call_args.args[2]
         self.assertEqual(written["snoozeUntil"], "2026-10-11T19:00:30Z")
         self.assertEqual(written["tournament"], "Old")  # last payload kept for the page
+        self.assertEqual(written["idleSince"], "2026-10-11T18:00:30Z")
+
+    def test_gives_up_for_the_weekend_after_six_hours(self):
+        # 18:00:30 Sunday; idle since 12:00 -> stop until Monday 06:00 UTC.
+        _, write = self.run_main({"idleSince": "2026-10-11T12:00:00Z", "snoozeUntil": "2026-10-11T18:00:00Z"})
+        written = write.call_args.args[2]
+        self.assertEqual(written["snoozeUntil"], "2026-10-12T06:00:00Z")
+        self.assertEqual(written["idleSince"], "2026-10-11T12:00:00Z")
+
+    def test_weekend_over(self):
+        sat = datetime(2026, 10, 10, 13, 0, tzinfo=timezone.utc)
+        early_mon = datetime(2026, 10, 12, 2, 0, tzinfo=timezone.utc)
+        self.assertEqual(ut.weekend_over(sat), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
+        self.assertEqual(ut.weekend_over(early_mon), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
 
     def test_snoozed_run_makes_no_requests(self):
         disc, write = self.run_main({"snoozeUntil": "2026-10-11T18:30:00Z"})

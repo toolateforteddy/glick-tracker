@@ -486,6 +486,27 @@ def idle_minutes() -> int:
     return int(os.environ.get("IDLE_SNOOZE_MINUTES") or 60)
 
 
+# After this long of hourly checks without finding Wolfe, stop until the weekend is over.
+GIVE_UP_AFTER = timedelta(hours=6)
+
+
+def weekend_over(now: datetime) -> datetime:
+    """Monday 06:00 UTC, when the sync schedule's weekend window closes."""
+    days = (0 - now.weekday()) % 7
+    monday = (now + timedelta(days=days)).replace(hour=6, minute=0, second=0, microsecond=0)
+    return monday if monday > now else monday + timedelta(days=7)
+
+
+def idle_snooze(previous: dict | None, now: datetime) -> dict:
+    """snoozeUntil/idleSince for a run that found nothing live to track."""
+    since = parse_date((previous or {}).get("idleSince")) or now
+    if now - since >= GIVE_UP_AFTER:
+        until = weekend_over(now).isoformat().replace("+00:00", "Z")
+    else:
+        until = snooze_stamp(now, idle_minutes())
+    return {"snoozeUntil": until, "idleSince": since.isoformat().replace("+00:00", "Z")}
+
+
 def main() -> int:
     gist_id = os.environ.get("GIST_ID", "").strip()
     token = os.environ.get("GH_PAT", "").strip()
@@ -537,11 +558,11 @@ def main() -> int:
             tournament_id, standings, me = discover_tournament(player_id, player_name, now, lookback)
             if not tournament_id:
                 # Nothing to track: keep the last payload but only look again in an hour.
-                until = snooze_stamp(now, idle_minutes())
+                idle = idle_snooze(previous, now)
                 print(f"No VGC tournament in the last {lookback} days includes {player_id or player_name}; "
-                      f"next check after {until}.")
+                      f"next check after {idle['snoozeUntil']}.")
                 if not dry_run and gist_id and token:
-                    write_payload(gist_id, token, {**(previous or {}), "snoozeUntil": until})
+                    write_payload(gist_id, token, {**(previous or {}), **idle})
                 return 0
         details = limitless(f"/tournaments/{tournament_id}/details") or {}
         pairings = limitless(f"/tournaments/{tournament_id}/pairings") or []
@@ -551,7 +572,7 @@ def main() -> int:
             payload["team"] = override
 
     if payload.get("phase") == "finished":
-        payload["snoozeUntil"] = snooze_stamp(now, idle_minutes())
+        payload.update(idle_snooze(previous, now))
 
     if dry_run:
         print(json.dumps(payload, indent=2))
