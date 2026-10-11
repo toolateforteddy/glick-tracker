@@ -450,7 +450,7 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     cut = int(os.environ.get("RK9_TOP_CUT") or 8)
     rounds, info = rk9.scrape(rk9_id, pod, previous, player_name)
     if not rounds:
-        return None
+        return rk9_cut(rk9_id, pod, player_name, previous, info, now, stream, swiss, cut)
     details, standings, pairings, me = rk9.build_inputs(
         rk9_id, name or os.environ.get("RK9_EVENT_NAME") or info["name"] or rk9_id, rounds, player_name, previous, swiss, cut)
     if not me:
@@ -483,6 +483,31 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
         payload["snoozeUntil"] = snooze_stamp(now, snooze)
     else:
         payload["snoozeUntil"] = None
+    return payload
+
+
+def rk9_cut(rk9_id: str, pod: int, player_name: str, previous: dict | None, info: dict,
+            now: datetime, stream: str, swiss: int | None, cut: int) -> dict | None:
+    """Wolfe played this event but a newer round went up without him: a cut happened and he's out.
+
+    The result of his last match may not have been seen yet, so that one round is fetched once.
+    """
+    if not (previous and previous.get("tournamentId") == rk9_id and previous.get("matches")):
+        return None
+    last = max(int(m.get("round") or 0) for m in previous["matches"])
+    if int(info.get("latest") or 0) <= last:
+        return None
+    payload = {**previous, "updatedAt": now.isoformat().replace("+00:00", "Z")}
+    pending = [int(m.get("round") or 0) for m in previous["matches"] if m.get("result") is None]
+    if pending and (found := rk9.fetch_round(rk9_id, pod, pending[-1])):
+        details, standings, pairings, me = rk9.build_inputs(
+            rk9_id, previous.get("tournament") or rk9_id, {pending[-1]: found}, player_name, previous, swiss, cut)
+        if me:
+            payload.update(build_payload(rk9_id, details, standings, pairings, me, previous, now, stream))
+    payload.update(phase="finished", status=f"Eliminated after Round {last}", currentMatchPending=False,
+                   roundStartedAt=None, snoozeUntil=None)
+    if payload.get("topCutStatus") != "clinched":
+        payload.update(topCutStatus="eliminated", topCutAlive=False)
     return payload
 
 

@@ -23,8 +23,12 @@ describe('wolfeOut', () => {
     expect(wolfeOut(base)).toBe(false)
   })
 
-  it('is true once he is projected out of top cut', () => {
-    expect(wolfeOut({ ...base, topCutStatus: 'eliminated', topCutAlive: false })).toBe(true)
+  it('stays false while he is only projected out of top cut', () => {
+    expect(wolfeOut({ ...base, topCutStatus: 'eliminated', topCutAlive: false })).toBe(false)
+  })
+
+  it('is true once a cut goes up without him', () => {
+    expect(wolfeOut({ ...base, phase: 'finished', status: 'Eliminated after Round 9', topCutStatus: 'eliminated' })).toBe(true)
   })
 
   it('is true after a top cut loss, a drop, or the end of the event', () => {

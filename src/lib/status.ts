@@ -1,9 +1,11 @@
 import type { TrackerPayload } from '../types'
 
-/** Wolfe has no more rounds to play: projected out of top cut, lost in top cut, dropped, or the event ended. */
+/**
+ * Wolfe has actually left the event: a cut went up without him or the event ended (the sync marks
+ * both as finished), he dropped, or he lost in top cut. Being projected out isn't enough.
+ */
 export function wolfeOut(data: TrackerPayload): boolean {
   if (data.phase === 'finished' || data.status.startsWith('Dropped')) return true
-  if (data.topCutStatus === 'eliminated' || (!data.topCutStatus && !data.topCutAlive && data.phase === 'swiss')) return true
   const cut = data.matches.filter((m) => m.phase === 'topcut')
   return data.phase === 'topcut' && cut.at(-1)?.result === 'L'
 }

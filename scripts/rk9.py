@@ -400,6 +400,7 @@ def scrape(tournament_id: str, pod: int, previous: dict | None,
     current = by_round.get(latest) or fetch_round(tournament_id, pod, latest)
     my_id = normalize_name(player_name)
     if not any(p and p["id"] == my_id for m in current for p in (m["p1"], m["p2"])):
+        info["latest"] = latest  # lets the caller tell "never here" from "cut from this round"
         return {}, info
 
     wanted = rounds_to_fetch(previous, tournament_id, latest)
