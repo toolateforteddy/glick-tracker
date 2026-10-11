@@ -1,0 +1,38 @@
+{
+  "updatedAt": "2026-10-11T18:42:00Z",
+  "tournament": "Demo Regional Championships",
+  "tournamentId": "demo",
+  "tournamentUrl": null,
+  "status": "Round 7 Swiss",
+  "phase": "swiss",
+  "round": 7,
+  "swissRounds": 9,
+  "topCutSize": 32,
+  "players": 812,
+  "record": { "w": 5, "l": 1, "t": 0 },
+  "standing": 42,
+  "table": 18,
+  "opw": 61.45,
+  "topCutAlive": true,
+  "topCutStatus": "alive",
+  "stream": "https://www.twitch.tv/wolfeyvgc",
+  "roundStartedAt": null,
+  "currentMatchPending": true,
+  "team": [
+    { "species": "Incineroar", "item": "Safety Goggles", "ability": "Intimidate", "tera": "Ghost", "moves": ["Fake Out", "Flare Blitz", "Knock Off", "Parting Shot"] },
+    { "species": "Urshifu-Rapid-Strike", "item": "Choice Scarf", "ability": "Unseen Fist", "tera": "Water", "moves": ["Surging Strikes", "Close Combat", "U-turn", "Aqua Jet"] },
+    { "species": "Flutter Mane", "item": "Booster Energy", "ability": "Protosynthesis", "tera": "Fairy", "moves": ["Moonblast", "Shadow Ball", "Icy Wind", "Protect"] },
+    { "species": "Rillaboom", "item": "Assault Vest", "ability": "Grassy Surge", "tera": "Fire", "moves": ["Fake Out", "Grassy Glide", "Wood Hammer", "U-turn"] },
+    { "species": "Chien-Pao", "item": "Focus Sash", "ability": "Sword of Ruin", "tera": "Stellar", "moves": ["Icicle Crash", "Sucker Punch", "Sacred Sword", "Protect"] },
+    { "species": "Amoonguss", "item": "Rocky Helmet", "ability": "Regenerator", "tera": "Water", "moves": ["Spore", "Rage Powder", "Pollen Puff", "Protect"] }
+  ],
+  "matches": [
+    { "round": 1, "phase": "swiss", "label": "R1", "table": 12, "opponent": "Player A", "opponentId": "a", "result": "W", "score": "2-0" },
+    { "round": 2, "phase": "swiss", "label": "R2", "table": 4, "opponent": "Player B", "opponentId": "b", "result": "W", "score": "2-1" },
+    { "round": 3, "phase": "swiss", "label": "R3", "table": 9, "opponent": "Player C", "opponentId": "c", "result": "L", "score": "1-2" },
+    { "round": 4, "phase": "swiss", "label": "R4", "table": 22, "opponent": "Player D", "opponentId": "d", "result": "W", "score": null },
+    { "round": 5, "phase": "swiss", "label": "R5", "table": 15, "opponent": "Player E", "opponentId": "e", "result": "W", "score": "2-0" },
+    { "round": 6, "phase": "swiss", "label": "R6", "table": 7, "opponent": "Player F", "opponentId": "f", "result": "W", "score": "2-1" },
+    { "round": 7, "phase": "swiss", "label": "R7", "table": 18, "opponent": "Player G", "opponentId": "g", "result": null, "score": null }
+  ]
+}
