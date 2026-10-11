@@ -24,6 +24,9 @@ A zero-cost, live fan dashboard for following Wolfe Glick through VGC tournament
    - `TEAM_PASTE_URL`: a pokepast.es link for Wolfe's team (RK9 team lists aren't scraped)
    - `PLAYER_ID`: Limitless username to track (otherwise matched by the name "Wolfe Glick")
    - `STREAM_URL`: link for the stream badge (defaults to Wolfe's Twitch)
+   - `VITE_GOATCOUNTER_CODE`: a [GoatCounter](https://www.goatcounter.com) site code (the `xyz` in
+     `xyz.goatcounter.com`) to count page views. Cookieless and free for non-commercial sites; off when
+     unset. Open the tracker once with `#toggle-goatcounter` on the URL to stop counting your own browser.
 3. **Pages**: Settings → Pages → Source: **GitHub Actions**.
 
 ## Workflows
