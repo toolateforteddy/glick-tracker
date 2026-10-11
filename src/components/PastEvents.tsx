@@ -50,7 +50,7 @@ function EventRow({ event: e }: { event: PastEvent }) {
           <div className="text-xs text-slate-500 sm:truncate">
             {formatDates(e.startDate, e.endDate)}
             {e.location ? ` · ${e.location}` : ''}
-            {e.players ? ` · ${e.players.toLocaleString()} players` : ''}
+            {e.players ? ` · ${e.players.toLocaleString('en-US')} players` : ''}
           </div>
         </div>
         <div className="shrink-0 text-right font-mono text-lg font-bold">
