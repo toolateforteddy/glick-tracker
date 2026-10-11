@@ -69,7 +69,7 @@ export function Socials() {
 /** Logo-only links for the page header; the full cards stay at the bottom. */
 export function SocialIcons() {
   return (
-    <nav aria-label="Wolfe's socials" className="flex items-center gap-2">
+    <nav aria-label="Wolfe's socials" className="flex items-center gap-1.5 sm:gap-2">
       {SOCIALS.map(({ name, url, cta, Icon, tone }) => (
         <a
           key={name}
@@ -78,9 +78,9 @@ export function SocialIcons() {
           rel="noreferrer"
           title={`${cta} on ${name}`}
           aria-label={`${cta} on ${name}`}
-          className={`grid size-9 place-items-center rounded-xl text-white transition ${tone}`}
+          className={`grid size-7 place-items-center rounded-lg text-white transition sm:size-9 sm:rounded-xl ${tone}`}
         >
-          <Icon className="size-4" />
+          <Icon className="size-3.5 sm:size-4" />
         </a>
       ))}
     </nav>
