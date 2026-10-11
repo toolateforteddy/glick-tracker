@@ -59,7 +59,7 @@ function PokemonCard({ mon }: { mon: TeamMember }) {
           </div>
           <dl className="mt-1 space-y-0.5 text-sm">
             <div className="flex gap-1.5">
-              <dt className="text-slate-500">@</dt>
+              <dt className="text-slate-500">Item</dt>
               <dd className="flex min-w-0 items-center gap-1 text-slate-200">
                 <ItemIcon item={mon.item} />
                 <span className="truncate">{mon.item || '—'}</span>
