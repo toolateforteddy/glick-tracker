@@ -23,11 +23,11 @@ export function TeamGrid({ team }: { team: TeamMember[] }) {
   )
 }
 
-function Sprite({ species }: { species: string }) {
+export function Sprite({ species, className = 'size-20' }: { species: string; className?: string }) {
   const [stage, setStage] = useState(0)
   if (stage > 1) {
     return (
-      <div className="flex size-20 items-center justify-center rounded-2xl bg-slate-800">
+      <div className={`flex ${className} items-center justify-center rounded-2xl bg-slate-800`}>
         <CircleDot className="size-8 text-slate-600" />
       </div>
     )
@@ -38,7 +38,7 @@ function Sprite({ species }: { species: string }) {
       alt={species}
       loading="lazy"
       onError={() => setStage((s) => s + 1)}
-      className="sprite size-20 shrink-0 rounded-2xl bg-slate-800/60 object-contain"
+      className={`sprite ${className} shrink-0 rounded-2xl bg-slate-800/60 object-contain`}
     />
   )
 }

@@ -1,0 +1,1500 @@
+{
+  "events": [
+    {
+      "id": "BA002-JL3KVbvivVKNAc",
+      "name": "2027 Baltimore Pokémon Regional Championships",
+      "location": "Baltimore, US",
+      "startDate": "2026-09-18",
+      "endDate": "2026-09-20",
+      "url": "https://rk9.gg/tournament/BA002-JL3KVbvivVKNAc",
+      "players": 1174,
+      "placing": 15,
+      "record": {
+        "w": 10,
+        "l": 3,
+        "t": 0
+      },
+      "swissRounds": null,
+      "topCutSize": null,
+      "madeTopCut": false,
+      "team": [
+        {
+          "species": "Gholdengo",
+          "item": "Life Orb",
+          "ability": "Good as Gold",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Shadow Ball",
+            "Make It Rain",
+            "Nasty Plot"
+          ]
+        },
+        {
+          "species": "Gardevoir",
+          "item": "Gardevoirite",
+          "ability": "Synchronize",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Expanding Force",
+            "Hyper Voice",
+            "Calm Mind"
+          ]
+        },
+        {
+          "species": "Sneasler",
+          "item": "Psychic Seed",
+          "ability": "Unburden",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Close Combat",
+            "Dire Claw",
+            "Throat Chop"
+          ]
+        },
+        {
+          "species": "Salamence",
+          "item": "Salamencite",
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Tailwind",
+            "Double-Edge",
+            "Draco Meteor"
+          ]
+        },
+        {
+          "species": "Incineroar",
+          "item": "Sitrus Berry",
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Fake Out",
+            "Parting Shot",
+            "Flare Blitz",
+            "Darkest Lariat"
+          ]
+        },
+        {
+          "species": "Indeedee-F",
+          "item": "Colbur Berry",
+          "ability": "Psychic Surge",
+          "tera": null,
+          "moves": [
+            "Follow Me",
+            "Psychic",
+            "Helping Hand",
+            "Protect"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Brian Hough",
+          "opponentId": "brianhough",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Sean Bolduc",
+          "opponentId": "seanbolduc",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Patrick Gabbett",
+          "opponentId": "patrickgabbett",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Christopher Han",
+          "opponentId": "christopherhan",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Jeremiah Paul",
+          "opponentId": "jeremiahpaul",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Mike Watson",
+          "opponentId": "mikewatson",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Sierra Elsbecker",
+          "opponentId": "sierraelsbecker",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Yichun Wu",
+          "opponentId": "yichunwu",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Noah Singer",
+          "opponentId": "noahsinger",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Jackson Baldus",
+          "opponentId": "jacksonbaldus",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Aditya Subramanian",
+          "opponentId": "adityasubramanian",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "Stefan Mott",
+          "opponentId": "stefanmott",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 13,
+          "phase": "swiss",
+          "label": "R13",
+          "opponent": "Cole Basham",
+          "opponentId": "colebasham",
+          "result": "L",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "WCS02wAQpCIaqFmXxER4",
+      "name": "2026 Pokémon World Championships",
+      "location": "San Francisco, US",
+      "startDate": "2026-08-28",
+      "endDate": "2026-08-30",
+      "url": "https://rk9.gg/tournament/WCS02wAQpCIaqFmXxER4",
+      "players": 645,
+      "placing": 59,
+      "record": {
+        "w": 5,
+        "l": 3,
+        "t": 0
+      },
+      "swissRounds": null,
+      "topCutSize": null,
+      "madeTopCut": false,
+      "team": [
+        {
+          "species": "Farigiraf",
+          "item": "Sitrus Berry",
+          "ability": "Armor Tail",
+          "tera": null,
+          "moves": [
+            "Psychic",
+            "Trick Room",
+            "Thunderbolt",
+            "Nasty Plot"
+          ]
+        },
+        {
+          "species": "Whimsicott",
+          "item": "Focus Sash",
+          "ability": "Prankster",
+          "tera": null,
+          "moves": [
+            "Moonblast",
+            "Tailwind",
+            "Encore",
+            "Charm"
+          ]
+        },
+        {
+          "species": "Staraptor",
+          "item": "Staraptite",
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Brave Bird",
+            "Close Combat",
+            "Tailwind"
+          ]
+        },
+        {
+          "species": "Gholdengo",
+          "item": "Life Orb",
+          "ability": "Good as Gold",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Shadow Ball",
+            "Make It Rain",
+            "Power Gem"
+          ]
+        },
+        {
+          "species": "Tyranitar",
+          "item": "Chople Berry",
+          "ability": "Sand Stream",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Rock Slide",
+            "Knock Off",
+            "Low Kick"
+          ]
+        },
+        {
+          "species": "Excadrill",
+          "item": "Expert Belt",
+          "ability": "Sand Rush",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "High Horsepower",
+            "Iron Head",
+            "Earthquake"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Hirofumi Kimura",
+          "opponentId": "hirofumikimura",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Oliver Eskolin",
+          "opponentId": "olivereskolin",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Joji Kaieda",
+          "opponentId": "jojikaieda",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Stefano Greppi",
+          "opponentId": "stefanogreppi",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "WEI CHYR",
+          "opponentId": "weichyr",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "KEVIN LAN",
+          "opponentId": "kevinlan",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Jérémy Côté",
+          "opponentId": "jrmyct",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Pok Yin Evan Choi",
+          "opponentId": "pokyinevanchoi",
+          "result": "L",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "NA02wgUPFDXKmQmqILwS",
+      "name": "2026 North America Pokémon International Championships",
+      "location": "New Orleans, US",
+      "startDate": "2026-06-12",
+      "endDate": "2026-06-14",
+      "url": "https://rk9.gg/tournament/NA02wgUPFDXKmQmqILwS",
+      "players": 1263,
+      "placing": 3,
+      "record": {
+        "w": 14,
+        "l": 2,
+        "t": 0
+      },
+      "swissRounds": 14,
+      "topCutSize": 8,
+      "madeTopCut": true,
+      "team": [
+        {
+          "species": "Mamoswine",
+          "item": "Focus Sash",
+          "ability": "Oblivious",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Icicle Crash",
+            "Earthquake",
+            "Ice Shard"
+          ]
+        },
+        {
+          "species": "Toxapex",
+          "item": "Leftovers",
+          "ability": "Regenerator",
+          "tera": null,
+          "moves": [
+            "Baneful Bunker",
+            "Infestation",
+            "Toxic",
+            "Wide Guard"
+          ]
+        },
+        {
+          "species": "Sneasler",
+          "item": "White Herb",
+          "ability": "Unburden",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Close Combat",
+            "Fake Out",
+            "Dire Claw"
+          ]
+        },
+        {
+          "species": "Hydreigon",
+          "item": "Choice Scarf",
+          "ability": "Levitate",
+          "tera": null,
+          "moves": [
+            "Dark Pulse",
+            "Earth Power",
+            "Snarl",
+            "Draco Meteor"
+          ]
+        },
+        {
+          "species": "Charizard",
+          "item": "Charizardite Y",
+          "ability": "Blaze",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Heat Wave",
+            "Solar Beam",
+            "Weather Ball"
+          ]
+        },
+        {
+          "species": "Incineroar",
+          "item": "Sitrus Berry",
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Fake Out",
+            "Parting Shot",
+            "Flare Blitz",
+            "Throat Chop"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Collin Beer",
+          "opponentId": "collinbeer",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "CJ Schoenthaler",
+          "opponentId": "cjschoenthaler",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Diego Ortiz",
+          "opponentId": "diegoortiz",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "ALEX UNDERHILL",
+          "opponentId": "alexunderhill",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Chase Rumpca",
+          "opponentId": "chaserumpca",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Julian Hernandez-Perocier",
+          "opponentId": "julianhernandezperocier",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Zachary Weed",
+          "opponentId": "zacharyweed",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Collin Heier",
+          "opponentId": "collinheier",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Kareem Muakkit",
+          "opponentId": "kareemmuakkit",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Ko Tsukide",
+          "opponentId": "kotsukide",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Federico Camporesi",
+          "opponentId": "federicocamporesi",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "Alex Gómez Berna",
+          "opponentId": "alexgmezberna",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 13,
+          "phase": "swiss",
+          "label": "R13",
+          "opponent": "Adrien Hurley",
+          "opponentId": "adrienhurley",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 14,
+          "phase": "swiss",
+          "label": "R14",
+          "opponent": null,
+          "opponentId": null,
+          "result": "BYE",
+          "score": null
+        },
+        {
+          "round": 15,
+          "phase": "topcut",
+          "label": "Top 8",
+          "opponent": "Marcus Dion",
+          "opponentId": "marcusdion",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 16,
+          "phase": "topcut",
+          "label": "Top 4",
+          "opponent": "Eric Rios",
+          "opponentId": "ericrios",
+          "result": "L",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "IN02wbUMQOt2eNv12cgC",
+      "name": "2026 Indianapolis Pokémon Regional Championships",
+      "location": "Indianapolis, US",
+      "startDate": "2026-05-29",
+      "endDate": "2026-05-31",
+      "url": "https://rk9.gg/tournament/IN02wbUMQOt2eNv12cgC",
+      "players": 1092,
+      "placing": 2,
+      "record": {
+        "w": 14,
+        "l": 2,
+        "t": 0
+      },
+      "swissRounds": 12,
+      "topCutSize": 16,
+      "madeTopCut": true,
+      "team": [
+        {
+          "species": "Sneasler",
+          "item": "White Herb",
+          "ability": "Unburden",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Close Combat",
+            "Dire Claw",
+            "Fake Out"
+          ]
+        },
+        {
+          "species": "Sinistcha",
+          "item": "Sitrus Berry",
+          "ability": "Hospitality",
+          "tera": null,
+          "moves": [
+            "Rage Powder",
+            "Trick Room",
+            "Matcha Gotcha",
+            "Protect"
+          ]
+        },
+        {
+          "species": "Talonflame",
+          "item": "Sharp Beak",
+          "ability": "Gale Wings",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Brave Bird",
+            "Flare Blitz",
+            "Swords Dance"
+          ]
+        },
+        {
+          "species": "Steelix",
+          "item": "Steelixite",
+          "ability": "Sturdy",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Heavy Slam",
+            "High Horsepower",
+            "Wide Guard"
+          ]
+        },
+        {
+          "species": "Rotom-Wash",
+          "item": "Leftovers",
+          "ability": "Levitate",
+          "tera": null,
+          "moves": [
+            "Will-O-Wisp",
+            "Thunderbolt",
+            "Hydro Pump",
+            "Light Screen"
+          ]
+        },
+        {
+          "species": "Tyranitar",
+          "item": "Tyranitarite",
+          "ability": "Sand Stream",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Rock Slide",
+            "Knock Off",
+            "Dragon Dance"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Joseph Nunziata",
+          "opponentId": "josephnunziata",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Kyle Houston",
+          "opponentId": "kylehouston",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Brock Bateman",
+          "opponentId": "brockbateman",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Ashley Scobey",
+          "opponentId": "ashleyscobey",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Alex Archambault",
+          "opponentId": "alexarchambault",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Jesus Avila",
+          "opponentId": "jesusavila",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Brendan DeWerth",
+          "opponentId": "brendandewerth",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Steven Gillespie",
+          "opponentId": "stevengillespie",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Joshua Lorcy",
+          "opponentId": "joshualorcy",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Evan Scott",
+          "opponentId": "evanscott",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Nathaniel Sitler",
+          "opponentId": "nathanielsitler",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "MJ Rogers",
+          "opponentId": "mjrogers",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 13,
+          "phase": "topcut",
+          "label": "Top 16",
+          "opponent": "Patrick Dillon",
+          "opponentId": "patrickdillon",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 14,
+          "phase": "topcut",
+          "label": "Top 8",
+          "opponent": "Alex Underhill",
+          "opponentId": "alexunderhill",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 15,
+          "phase": "topcut",
+          "label": "Top 4",
+          "opponent": "Michael Zhang",
+          "opponentId": "michaelzhang",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 16,
+          "phase": "topcut",
+          "label": "Finals",
+          "opponent": "Arsal Puri",
+          "opponentId": "arsalpuri",
+          "result": "L",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "HO02w2PgpC7mWHP8zYRI",
+      "name": "2026 Houston Pokémon Regional Championships",
+      "location": "Houston, US",
+      "startDate": "2026-03-20",
+      "endDate": "2026-03-22",
+      "url": "https://rk9.gg/tournament/HO02w2PgpC7mWHP8zYRI",
+      "players": 683,
+      "placing": 29,
+      "record": {
+        "w": 9,
+        "l": 3,
+        "t": 0
+      },
+      "swissRounds": null,
+      "topCutSize": null,
+      "madeTopCut": false,
+      "team": [
+        {
+          "species": "Flutter Mane",
+          "item": null,
+          "ability": "Protosynthesis",
+          "tera": null,
+          "moves": [
+            "Dazzling Gleam",
+            "Shadow Ball",
+            "Moonblast",
+            "Power Gem"
+          ]
+        },
+        {
+          "species": "Raging Bolt",
+          "item": null,
+          "ability": "Protosynthesis",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Dragon Pulse",
+            "Thunderclap",
+            "Calm Mind"
+          ]
+        },
+        {
+          "species": "Gouging Fire",
+          "item": null,
+          "ability": "Protosynthesis",
+          "tera": null,
+          "moves": [
+            "Heat Crash",
+            "Protect",
+            "Dragon Dance",
+            "Flare Blitz"
+          ]
+        },
+        {
+          "species": "Landorus",
+          "item": null,
+          "ability": "Sheer Force",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Earth Power",
+            "Sludge Bomb",
+            "Imprison"
+          ]
+        },
+        {
+          "species": "Torkoal",
+          "item": null,
+          "ability": "Drought",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Flamethrower",
+            "Helping Hand",
+            "Yawn"
+          ]
+        },
+        {
+          "species": "Rillaboom",
+          "item": null,
+          "ability": "Grassy Surge",
+          "tera": null,
+          "moves": [
+            "Fake Out",
+            "Wood Hammer",
+            "Grassy Glide",
+            "High Horsepower"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Jesse Raynor",
+          "opponentId": "jesseraynor",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Austin Frank",
+          "opponentId": "austinfrank",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Max Simon",
+          "opponentId": "maxsimon",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Ruizhe Zhang",
+          "opponentId": "ruizhezhang",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Rob McNeilly",
+          "opponentId": "robmcneilly",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Erik Ewalt",
+          "opponentId": "erikewalt",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Kathryn Nowak",
+          "opponentId": "kathrynnowak",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Zachary Spitzer",
+          "opponentId": "zacharyspitzer",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Apollo Stephens",
+          "opponentId": "apollostephens",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Koji Kanamori",
+          "opponentId": "kojikanamori",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Masahiro Taoka",
+          "opponentId": "masahirotaoka",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "Zach Knight",
+          "opponentId": "zachknight",
+          "result": "W",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "EU02mADIyxk2QHCU8dqx",
+      "name": "2026 Europe Pokémon International Championships",
+      "location": "London, UK",
+      "startDate": "2026-02-13",
+      "endDate": "2026-02-15",
+      "url": "https://rk9.gg/tournament/EU02mADIyxk2QHCU8dqx",
+      "players": 1614,
+      "placing": 39,
+      "record": {
+        "w": 10,
+        "l": 3,
+        "t": 0
+      },
+      "swissRounds": null,
+      "topCutSize": null,
+      "madeTopCut": false,
+      "team": [
+        {
+          "species": "Ogerpon-Wellspring",
+          "item": null,
+          "ability": "Water Absorb",
+          "tera": null,
+          "moves": [
+            "Spiky Shield",
+            "Ivy Cudgel",
+            "Follow Me",
+            "Horn Leech"
+          ]
+        },
+        {
+          "species": "Incineroar",
+          "item": null,
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Fake Out",
+            "Parting Shot",
+            "Flare Blitz",
+            "Knock Off"
+          ]
+        },
+        {
+          "species": "Farigiraf",
+          "item": null,
+          "ability": "Armor Tail",
+          "tera": null,
+          "moves": [
+            "Trick Room",
+            "Psychic",
+            "Hyper Voice",
+            "Protect"
+          ]
+        },
+        {
+          "species": "Torkoal",
+          "item": null,
+          "ability": "Drought",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Eruption",
+            "Weather Ball",
+            "Helping Hand"
+          ]
+        },
+        {
+          "species": "Chien-Pao",
+          "item": null,
+          "ability": "Sword of Ruin",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Icicle Crash",
+            "Sucker Punch",
+            "Sacred Sword"
+          ]
+        },
+        {
+          "species": "Flutter Mane",
+          "item": null,
+          "ability": "Protosynthesis",
+          "tera": null,
+          "moves": [
+            "Dazzling Gleam",
+            "Moonblast",
+            "Shadow Ball",
+            "Mystical Fire"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "José Luis García Sánchez",
+          "opponentId": "josluisgarcasnchez",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Gustavo MOREIRA VIDAL PEREIRA",
+          "opponentId": "gustavomoreiravidalpereira",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "João Felipe Leite",
+          "opponentId": "joofelipeleite",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Alessandro Albertin",
+          "opponentId": "alessandroalbertin",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Noel Caballero Blanco",
+          "opponentId": "noelcaballeroblanco",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Yuta Ishigaki",
+          "opponentId": "yutaishigaki",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Antonio Pala",
+          "opponentId": "antoniopala",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Luke Kroll",
+          "opponentId": "lukekroll",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Jan Schultis",
+          "opponentId": "janschultis",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Giovanni Cischke",
+          "opponentId": "giovannicischke",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Sam Parish",
+          "opponentId": "samparish",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "Davide Carrer",
+          "opponentId": "davidecarrer",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 13,
+          "phase": "swiss",
+          "label": "R13",
+          "opponent": "Leon Drescher",
+          "opponentId": "leondrescher",
+          "result": "W",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "MK02mx9kmM49UZ5g4JxH",
+      "name": "2026 Milwaukee Pokémon Regional Championships",
+      "location": "Milwaukee, US",
+      "startDate": "2025-10-10",
+      "endDate": "2025-10-12",
+      "url": "https://rk9.gg/tournament/MK02mx9kmM49UZ5g4JxH",
+      "players": 756,
+      "placing": 6,
+      "record": {
+        "w": 11,
+        "l": 3,
+        "t": 0
+      },
+      "swissRounds": 12,
+      "topCutSize": 16,
+      "madeTopCut": true,
+      "team": [
+        {
+          "species": "Gholdengo",
+          "item": null,
+          "ability": "Good as Gold",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Shadow Ball",
+            "Make It Rain",
+            "Nasty Plot"
+          ]
+        },
+        {
+          "species": "Ursaluna-Bloodmoon",
+          "item": null,
+          "ability": "Mind’s Eye",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Blood Moon",
+            "Earth Power",
+            "Hyper Voice"
+          ]
+        },
+        {
+          "species": "Incineroar",
+          "item": null,
+          "ability": "Intimidate",
+          "tera": null,
+          "moves": [
+            "Fake Out",
+            "Parting Shot",
+            "Knock Off",
+            "Flare Blitz"
+          ]
+        },
+        {
+          "species": "Whimsicott",
+          "item": null,
+          "ability": "Prankster",
+          "tera": null,
+          "moves": [
+            "Tailwind",
+            "Moonblast",
+            "Encore",
+            "Fake Tears"
+          ]
+        },
+        {
+          "species": "Dragonite",
+          "item": null,
+          "ability": "Multiscale",
+          "tera": null,
+          "moves": [
+            "Protect",
+            "Scale Shot",
+            "Extreme Speed",
+            "Low Kick"
+          ]
+        },
+        {
+          "species": "Zoroark-Hisui",
+          "item": null,
+          "ability": "Illusion",
+          "tera": null,
+          "moves": [
+            "Bitter Malice",
+            "Icy Wind",
+            "Protect",
+            "Taunt"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Jack Stonecipher",
+          "opponentId": "jackstonecipher",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Charles Hrdlicka",
+          "opponentId": "charleshrdlicka",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Vincenzo Cicco",
+          "opponentId": "vincenzocicco",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Joshua Polignone",
+          "opponentId": "joshuapolignone",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Rily Corn",
+          "opponentId": "rilycorn",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Dorian Kang",
+          "opponentId": "doriankang",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Christopher Baez",
+          "opponentId": "christopherbaez",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Yuki Zaninovich",
+          "opponentId": "yukizaninovich",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Stefan Mott",
+          "opponentId": "stefanmott",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": "Leonard Craft III",
+          "opponentId": "leonardcraftiii",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Dylan Matthews",
+          "opponentId": "dylanmatthews",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "Jérémy Côté",
+          "opponentId": "jrmyct",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 13,
+          "phase": "topcut",
+          "label": "Top 16",
+          "opponent": "Ethan Haberle",
+          "opponentId": "ethanhaberle",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 14,
+          "phase": "topcut",
+          "label": "Top 8",
+          "opponent": "Michael Arand",
+          "opponentId": "michaelarand",
+          "result": "L",
+          "score": null
+        }
+      ]
+    }
+  ],
+  "checked": [
+    "PT02mMVCgJGPQcHccDoy",
+    "LV02kSgge3zYTKAwlomv",
+    "LA0226md2zDgZtmvexIY",
+    "TO027Rvi7XmbN1f355Nc",
+    "SE027LIri9yqbewCPonE",
+    "OR02wF0GhaiorROTkFlu",
+    "LS02w5lpCOiMwPPo7QWD"
+  ],
+  "updatedAt": "2026-10-11T15:05:08Z"
+}

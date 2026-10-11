@@ -1,5 +1,6 @@
 import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react'
 import { HeroStatus } from './components/HeroStatus'
+import { PastEvents } from './components/PastEvents'
 import { RecordCard } from './components/RecordCard'
 import { RoundLog } from './components/RoundLog'
 import { RoundTimer } from './components/RoundTimer'
@@ -69,6 +70,10 @@ export default function App() {
           <TeamGrid team={data.team ?? []} />
         </main>
       )}
+
+      <div className="mt-8">
+        <PastEvents />
+      </div>
 
       <div className="mt-8">
         <Socials />

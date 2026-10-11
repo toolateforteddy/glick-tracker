@@ -49,6 +49,21 @@ deliberately light:
   the round plays out. Run the workflow with **force** to skip the snooze.
 - Rank on RK9 is by match points only (ties share a rank) since RK9 doesn't publish live standings.
 
+## Past events
+
+The **Past Events** section reads `src/data/history.json`, which is committed to the repo and bundled
+into the site, so finished events are never re-scraped by the live sync. To add an event after it
+ends, run the history script and commit the change:
+
+```bash
+python3 scripts/rk9_history.py                        # scan North American events, ICs and Worlds
+python3 scripts/rk9_history.py BA002-JL3KVbvivVKNAc   # or add specific RK9 tournament ids
+```
+
+It skips events already in the file (and events whose roster it already checked without finding
+Wolfe), then reads the roster for his final standing and public team list, plus one pairings page
+per round he played.
+
 ## Local development
 
 ```bash
