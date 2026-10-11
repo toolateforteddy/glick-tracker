@@ -19,7 +19,12 @@ from html.parser import HTMLParser
 from typing import Callable
 
 RK9 = "https://rk9.gg"
-USER_AGENT = "glick-tracker/1.0 (personal fan tracker; polls one pairings page every 10 min)"
+# Identify ourselves clearly so site owners know who is polling and how to ask us to stop.
+USER_AGENT = (
+    "glick-tracker/1.0 (non-commercial fan tracker for one player; about one page per round, "
+    "backs off when idle; source: https://github.com/toolateforteddy/glick-tracker; "
+    "to ask us to stop: https://github.com/toolateforteddy/glick-tracker/issues)"
+)
 MASTERS_POD = 2
 MAX_ROUNDS = 25
 REQUEST_GAP_SECONDS = 1.5
