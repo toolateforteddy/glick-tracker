@@ -34,7 +34,7 @@ export function RoundTimer({ data }: { data: TrackerPayload }) {
       <Shell link={link}>
         <Hourglass className="size-6 text-slate-500" />
         <div className="text-slate-300">
-          {bye ? 'Bye this round' : 'Match reported'} - waiting for next pairings
+          {bye ? 'Bye this round' : 'Match finished'} - waiting for the next round
         </div>
       </Shell>
     )
@@ -44,7 +44,7 @@ export function RoundTimer({ data }: { data: TrackerPayload }) {
     return (
       <Shell link={link}>
         <Hourglass className="size-6 animate-pulse text-amber-400" />
-        <div className="font-semibold text-amber-200">Match in progress - awaiting slip submission</div>
+        <div className="font-semibold text-amber-200">Match in progress</div>
       </Shell>
     )
   }
@@ -59,7 +59,7 @@ export function RoundTimer({ data }: { data: TrackerPayload }) {
         <div className="font-mono text-3xl font-bold tabular-nums">
           {mm}:{ss}
         </div>
-        <div className="text-xs text-slate-400">since pairings posted</div>
+        <div className="text-xs text-slate-400">since the round started</div>
       </div>
     </Shell>
   )

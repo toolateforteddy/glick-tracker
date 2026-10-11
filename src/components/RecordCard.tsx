@@ -3,9 +3,9 @@ import { wolfeOut } from '../lib/status'
 import type { TopCutStatus, TrackerPayload } from '../types'
 
 const CUT_STYLES: Record<TopCutStatus, { label: string; cls: string; Icon: typeof ShieldCheck }> = {
-  alive: { label: 'Alive', cls: 'bg-amber-500/15 text-amber-300 ring-amber-500/40', Icon: ShieldQuestion },
-  bubble: { label: 'Must Win Out', cls: 'bg-orange-500/15 text-orange-300 ring-orange-500/40', Icon: ShieldQuestion },
-  clinched: { label: 'Cut Clinched', cls: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/40', Icon: ShieldCheck },
+  alive: { label: 'Still in the running', cls: 'bg-amber-500/15 text-amber-300 ring-amber-500/40', Icon: ShieldQuestion },
+  bubble: { label: 'Must win every round left', cls: 'bg-orange-500/15 text-orange-300 ring-orange-500/40', Icon: ShieldQuestion },
+  clinched: { label: 'Made top cut', cls: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/40', Icon: ShieldCheck },
   eliminated: { label: 'Missed cut', cls: 'bg-slate-800/60 text-slate-300 ring-slate-700', Icon: ShieldMinus },
 }
 
@@ -45,8 +45,8 @@ export function RecordCard({ data, wide = false }: { data: TrackerPayload; wide?
             <div className="font-bold">{label}</div>
             {data.topCutSize ? (
               <div className="text-xs opacity-80">
-                {data.source === 'rk9' ? 'Projected: t' : 'T'}op {data.topCutSize} cut
-                {data.swissRounds ? ` after ${data.swissRounds} Swiss rounds` : ''}
+                {data.source === 'rk9' ? 'Expected: t' : 'T'}op {data.topCutSize} advance
+                {data.swissRounds ? ` after ${data.swissRounds} rounds` : ''}
               </div>
             ) : null}
           </div>

@@ -7,7 +7,7 @@ import type { TeamMember } from '../types'
 export function TeamGrid({ team }: { team: TeamMember[] }) {
   return (
     <section>
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Team Sheet</h2>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Team</h2>
       {team.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-slate-800 p-6 text-center text-slate-500">
           Team list not published yet
