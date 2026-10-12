@@ -6,7 +6,6 @@ import { RoundLog } from './components/RoundLog'
 import { RoundTimer } from './components/RoundTimer'
 import { SocialIcons, Socials } from './components/Socials'
 import { TeamGrid } from './components/TeamGrid'
-import { wolfeOut } from './lib/status'
 import { usePolling } from './lib/usePolling'
 
 const DEFAULT_GIST_RAW_URL =
@@ -58,24 +57,17 @@ export default function App() {
       ) : (
         <main className="space-y-4">
           <HeroStatus data={data} />
-          {wolfeOut(data) ? (
-            // No timer once his run is over: a wide record card above the log avoids a lopsided gap.
-            <>
-              <RecordCard data={data} wide />
+          {/* Wide screens: team on the left, record and rounds on the right. Phones keep record first. */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+            <div className="min-w-0 space-y-4 lg:order-2 lg:col-span-2">
+              <RecordCard data={data} />
+              <RoundTimer data={data} />
               <RoundLog matches={data.matches} />
-            </>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <div className="min-w-0 space-y-4 lg:col-span-1">
-                <RecordCard data={data} />
-                <RoundTimer data={data} />
-              </div>
-              <div className="min-w-0 lg:col-span-2">
-                <RoundLog matches={data.matches} />
-              </div>
             </div>
-          )}
-          <TeamGrid team={data.team ?? []} />
+            <div className="min-w-0 lg:order-1 lg:col-span-3">
+              <TeamGrid team={data.team ?? []} />
+            </div>
+          </div>
         </main>
       )}
 
