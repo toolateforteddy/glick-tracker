@@ -59,6 +59,7 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(mon["species"], "Indeedee-F")
         self.assertEqual(mon["ability"], "Psychic Surge")
         self.assertEqual(mon["item"], "Colbur Berry")
+        self.assertEqual(mon["nature"], "Calm")
         self.assertEqual(mon["moves"], ["Follow Me", "Psychic", "Helping Hand", "Protect"])
 
     def test_species_forms(self):

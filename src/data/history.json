@@ -1,6 +1,214 @@
 {
   "events": [
     {
+      "id": "LO002-drfp6esCSpyU3s",
+      "name": "2027 Louisville Pokémon Regional Championships",
+      "location": "Louisville, US",
+      "startDate": "2026-10-09",
+      "endDate": "2026-10-11",
+      "url": "https://rk9.gg/tournament/LO002-drfp6esCSpyU3s",
+      "players": 1099,
+      "placing": 66,
+      "record": {
+        "w": 8,
+        "l": 4,
+        "t": 0
+      },
+      "swissRounds": null,
+      "topCutSize": null,
+      "madeTopCut": false,
+      "team": [
+        {
+          "species": "Sneasler",
+          "item": "Psychic Seed",
+          "ability": "Unburden",
+          "tera": null,
+          "nature": "Adamant",
+          "moves": [
+            "Protect",
+            "Close Combat",
+            "Dire Claw",
+            "Throat Chop"
+          ]
+        },
+        {
+          "species": "Tyranitar",
+          "item": "Tyranitarite",
+          "ability": "Sand Stream",
+          "tera": null,
+          "nature": "Adamant",
+          "moves": [
+            "Protect",
+            "Rock Slide",
+            "Low Kick",
+            "Knock Off"
+          ]
+        },
+        {
+          "species": "Rotom-Heat",
+          "item": "Choice Scarf",
+          "ability": "Levitate",
+          "tera": null,
+          "nature": "Timid",
+          "moves": [
+            "Volt Switch",
+            "Overheat",
+            "Discharge",
+            "Trick"
+          ]
+        },
+        {
+          "species": "Indeedee-F",
+          "item": "Rocky Helmet",
+          "ability": "Psychic Surge",
+          "tera": null,
+          "nature": "Bold",
+          "moves": [
+            "Follow Me",
+            "Helping Hand",
+            "Psychic",
+            "Protect"
+          ]
+        },
+        {
+          "species": "Excadrill",
+          "item": "Focus Sash",
+          "ability": "Sand Rush",
+          "tera": null,
+          "nature": "Adamant",
+          "moves": [
+            "Protect",
+            "High Horsepower",
+            "Iron Head",
+            "Earthquake"
+          ]
+        },
+        {
+          "species": "Sceptile",
+          "item": "Sceptilite",
+          "ability": "Overgrow",
+          "tera": null,
+          "nature": "Timid",
+          "moves": [
+            "Detect",
+            "Dragon Pulse",
+            "Energy Ball",
+            "Earth Power"
+          ]
+        }
+      ],
+      "matches": [
+        {
+          "round": 1,
+          "phase": "swiss",
+          "label": "R1",
+          "opponent": "Ramon Ambert",
+          "opponentId": "ramonambert",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 2,
+          "phase": "swiss",
+          "label": "R2",
+          "opponent": "Gabriel Willenberg",
+          "opponentId": "gabrielwillenberg",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 3,
+          "phase": "swiss",
+          "label": "R3",
+          "opponent": "Dylan B",
+          "opponentId": "dylanb",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 4,
+          "phase": "swiss",
+          "label": "R4",
+          "opponent": "Lake Spohn",
+          "opponentId": "lakespohn",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 5,
+          "phase": "swiss",
+          "label": "R5",
+          "opponent": "Rily Corn",
+          "opponentId": "rilycorn",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 6,
+          "phase": "swiss",
+          "label": "R6",
+          "opponent": "Carson Confer",
+          "opponentId": "carsonconfer",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 7,
+          "phase": "swiss",
+          "label": "R7",
+          "opponent": "Troy Garcia",
+          "opponentId": "troygarcia",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 8,
+          "phase": "swiss",
+          "label": "R8",
+          "opponent": "Matthew Hansen",
+          "opponentId": "matthewhansen",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 9,
+          "phase": "swiss",
+          "label": "R9",
+          "opponent": "Kimari Gammage",
+          "opponentId": "kimarigammage",
+          "result": "L",
+          "score": null
+        },
+        {
+          "round": 10,
+          "phase": "swiss",
+          "label": "R10",
+          "opponent": null,
+          "opponentId": null,
+          "result": "BYE",
+          "score": null
+        },
+        {
+          "round": 11,
+          "phase": "swiss",
+          "label": "R11",
+          "opponent": "Quin Pruett",
+          "opponentId": "quinpruett",
+          "result": "W",
+          "score": null
+        },
+        {
+          "round": 12,
+          "phase": "swiss",
+          "label": "R12",
+          "opponent": "William Brown",
+          "opponentId": "williambrown",
+          "result": "L",
+          "score": null
+        }
+      ]
+    },
+    {
       "id": "BA002-JL3KVbvivVKNAc",
       "name": "2027 Baltimore Pokémon Regional Championships",
       "location": "Baltimore, US",
@@ -1496,5 +1704,5 @@
     "OR02wF0GhaiorROTkFlu",
     "LS02w5lpCOiMwPPo7QWD"
   ],
-  "updatedAt": "2026-10-11T15:05:08Z"
+  "updatedAt": "2026-10-12T23:23:13Z"
 }
