@@ -9,7 +9,7 @@ const CUT_STYLES: Record<TopCutStatus, { label: string; cls: string; Icon: typeo
   eliminated: { label: 'Missed cut', cls: 'bg-slate-800/60 text-slate-300 ring-slate-700', Icon: ShieldMinus },
 }
 
-export function RecordCard({ data, wide = false }: { data: TrackerPayload; wide?: boolean }) {
+export function RecordCard({ data }: { data: TrackerPayload }) {
   const { w, l, t = 0 } = data.record
   const cut: TopCutStatus = data.topCutStatus ?? (data.topCutAlive ? 'alive' : 'eliminated')
   const { label, cls, Icon } = CUT_STYLES[cut]
@@ -19,24 +19,22 @@ export function RecordCard({ data, wide = false }: { data: TrackerPayload; wide?
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">Record &amp; Standing</h2>
-      <div className={wide ? 'lg:flex lg:items-center lg:gap-8' : ''}>
-        <div className="mt-3 font-mono text-5xl font-black tracking-tight sm:text-6xl">
-          <span className="text-emerald-400">{w}</span>
-          <span className="text-slate-600">-</span>
-          <span className="text-rose-400">{l}</span>
-          {t > 0 && (
-            <>
-              <span className="text-slate-600">-</span>
-              <span className="text-slate-300">{t}</span>
-            </>
-          )}
-        </div>
-
-        <dl className={`mt-5 grid grid-cols-2 gap-3 ${wide ? 'lg:mt-3 lg:flex-1' : ''}`}>
-          <Stat label={data.source === 'rk9' ? 'Est. rank' : 'Rank'} value={data.standing != null ? `#${data.standing}` : '—'} />
-          <Stat label="Resistance" value={data.opw != null ? `${data.opw.toFixed(2)}%` : '—'} />
-        </dl>
+      <div className="mt-3 font-mono text-5xl font-black tracking-tight sm:text-6xl">
+        <span className="text-emerald-400">{w}</span>
+        <span className="text-slate-600">-</span>
+        <span className="text-rose-400">{l}</span>
+        {t > 0 && (
+          <>
+            <span className="text-slate-600">-</span>
+            <span className="text-slate-300">{t}</span>
+          </>
+        )}
       </div>
+
+      <dl className="mt-5 grid grid-cols-2 gap-3">
+        <Stat label={data.source === 'rk9' ? 'Est. rank' : 'Rank'} value={data.standing != null ? `#${data.standing}` : '—'} />
+        <Stat label="Resistance" value={data.opw != null ? `${data.opw.toFixed(2)}%` : '—'} />
+      </dl>
 
       {showCut && (
         <div className={`mt-5 flex items-center gap-2 rounded-2xl px-4 py-3 ring-1 ${cls}`}>
