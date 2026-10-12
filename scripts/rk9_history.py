@@ -27,7 +27,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import rk9  # noqa: E402
-from update_tracker import bracket_label  # noqa: E402
+from update_tracker import bracket_label, saved_team  # noqa: E402
 
 HISTORY_PATH = Path(__file__).resolve().parent.parent / "src" / "data" / "history.json"
 PLAYER_NAME = os.environ.get("PLAYER_NAME", "Wolfe Glick")
@@ -120,12 +120,14 @@ def parse_teamlist(html: str) -> list[dict]:
         ability = re.search(r"Ability:\s*(.+?)\s+Held Item:", text)
         item = re.search(r"Held Item:\s*(.+?)\s+(?:Stat Alignment:|Tera Type:|$)", text)
         tera = re.search(r"Tera Type:\s*(.+?)\s+(?:Stat Alignment:|$)", text)
+        nature = re.search(r"Stat Alignment:\s*(\S+)", text)
         moves = [b.text() for b in mon.find_all(lambda n: "badge" in n.classes) if b.text()]
         team.append({
             "species": species_name(head.replace("\xa0", " ")),
             "item": item[1].strip() if item else None,
             "ability": ability[1].strip() if ability else None,
             "tera": tera[1].strip() if tera else None,
+            "nature": nature[1] if nature else None,
             "moves": moves[:4],
         })
     return team
@@ -266,6 +268,8 @@ def main() -> int:
         if roster["teamlist"]:
             pause()
             team = parse_teamlist(rk9.fetch(roster["teamlist"]))
+        # Fall back to a team committed to data/teams/ when RK9 never published one.
+        team = team or saved_team(event["id"]) or []
         pause()
         pairings_html = rk9.fetch(f"/pairings/{event['id']}")
         info = rk9.parse_page_info(pairings_html)

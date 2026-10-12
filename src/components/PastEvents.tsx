@@ -81,7 +81,7 @@ function EventRow({ event: e }: { event: PastEvent }) {
                     <div className="min-w-0 text-sm">
                       <div className="truncate font-medium text-slate-100">
                         {mon.species}
-                        {mon.item && <span className="font-normal text-slate-400"> @ {mon.item}</span>}
+                        {mon.item && <span className="font-normal text-slate-400"> holding {mon.item}</span>}
                       </div>
                       <div className="truncate text-xs text-slate-500">{mon.moves.join(' · ')}</div>
                     </div>
