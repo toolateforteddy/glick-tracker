@@ -5,7 +5,9 @@ import type { TrackerPayload } from '../types'
 export function HeroStatus({ data }: { data: TrackerPayload }) {
   const live = data.phase === 'swiss' || data.phase === 'topcut'
   // Once his run is over the round timer goes away, so the way out to the event lives here.
-  const link = wolfeOut(data) ? sourceLink(data) : null
+  const link = data.notCompeting
+    ? data.tournamentUrl && { href: data.tournamentUrl, label: 'See the event on RK9' }
+    : wolfeOut(data) ? sourceLink(data) : null
   return (
     <section className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/60 p-5 text-center sm:p-7">
       <div className="flex flex-col items-center gap-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -34,8 +36,13 @@ export function HeroStatus({ data }: { data: TrackerPayload }) {
               <span className="relative inline-flex size-2.5 rounded-full bg-emerald-400" />
             </span>
           )}
-          {displayStatus(data)}
+          {data.notCompeting ? "Wolfe isn't competing" : displayStatus(data)}
         </span>
+        {data.notCompeting && (
+          <p className="max-w-md text-sm text-slate-400">
+            We spotted this tournament, but Wolfe isn't on the player list this time. Check back for his next event.
+          </p>
+        )}
         {link && (
           <a
             href={link.href}

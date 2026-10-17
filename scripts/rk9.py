@@ -371,6 +371,23 @@ def rounds_to_fetch(previous: dict | None, tournament_id: str, latest_round: int
     return missing + [latest_round]
 
 
+def parse_roster(html: str, player_name: str) -> dict | None:
+    """Wolfe's Masters roster row: final standing and the public team list link, if any."""
+    target = normalize_name(player_name)
+    for row in parse_html(html).find_all(lambda n: n.tag == "tr"):
+        cells = [c for c in row.children if not isinstance(c, str) and c.tag == "td"]
+        if len(cells) < 3 or normalize_name(cells[1].text() + cells[2].text()) != target:
+            continue
+        texts = [c.text() for c in cells]
+        if "Masters" not in texts:
+            continue
+        link = row.find(lambda n: n.tag == "a" and "/teamlist/" in n.attrs.get("href", ""))
+        standing = texts[-1] if texts[-1].isdigit() else None
+        return {"standing": int(standing) if standing else None,
+                "teamlist": link.attrs["href"] if link else None}
+    return None
+
+
 def parse_page_info(html: str) -> dict:
     """Event name and player count from the pairings page header."""
     root = parse_html(html)

@@ -27,6 +27,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import rk9  # noqa: E402
+from rk9 import parse_roster  # noqa: E402
 from update_tracker import bracket_label, saved_team  # noqa: E402
 
 HISTORY_PATH = Path(__file__).resolve().parent.parent / "src" / "data" / "history.json"
@@ -72,23 +73,6 @@ def parse_events(html: str) -> list[dict]:
 def wanted_by_default(event: dict) -> bool:
     return (event["location"].endswith(DEFAULT_REGIONS)
             or any(word in event["name"] for word in ALWAYS_SCAN))
-
-
-def parse_roster(html: str, player_name: str) -> dict | None:
-    """Wolfe's Masters roster row: final standing and the public team list link, if any."""
-    target = rk9.normalize_name(player_name)
-    for row in rk9.parse_html(html).find_all(lambda n: n.tag == "tr"):
-        cells = [c for c in row.children if not isinstance(c, str) and c.tag == "td"]
-        if len(cells) < 3 or rk9.normalize_name(cells[1].text() + cells[2].text()) != target:
-            continue
-        texts = [c.text() for c in cells]
-        if "Masters" not in texts:
-            continue
-        link = row.find(lambda n: n.tag == "a" and "/teamlist/" in n.attrs.get("href", ""))
-        standing = texts[-1] if texts[-1].isdigit() else None
-        return {"standing": int(standing) if standing else None,
-                "teamlist": link.attrs["href"] if link else None}
-    return None
 
 
 # Form words RK9 prints that Showdown's sprite ids leave out or spell differently.
