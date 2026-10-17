@@ -136,6 +136,20 @@ class IdleBackoffTest(unittest.TestCase):
         self.assertEqual(ut.weekend_over(sat), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
         self.assertEqual(ut.weekend_over(early_mon), datetime(2026, 10, 12, 6, 0, tzinfo=timezone.utc))
 
+    def test_weekday_give_up_wakes_before_the_next_weekend(self):
+        # Louisville finished on a Monday afternoon; the old rule slept through the Nice weekend.
+        mon = datetime(2026, 10, 12, 12, 46, tzinfo=timezone.utc)
+        thu = datetime(2026, 10, 15, 23, 0, tzinfo=timezone.utc)
+        self.assertEqual(ut.weekend_over(mon), datetime(2026, 10, 16, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(ut.weekend_over(thu), datetime(2026, 10, 16, 0, 0, tzinfo=timezone.utc))
+
+    def test_checks_afresh_after_a_give_up_snooze_ends(self):
+        # Gave up on a weekday until Friday 00:00; at that's wake-up start hourly checks again.
+        previous = {"idleSince": "2026-10-11T12:00:00Z", "snoozeUntil": "2026-10-16T00:00:00Z"}
+        fri = datetime(2026, 10, 16, 0, 0, 30, tzinfo=timezone.utc)
+        idle = ut.idle_snooze(previous, fri)
+        self.assertEqual(idle, {"snoozeUntil": "2026-10-16T01:00:30Z", "idleSince": "2026-10-16T00:00:30Z"})
+
     def test_wolfe_done(self):
         self.assertTrue(ut.wolfe_done({"phase": "finished"}))
         self.assertTrue(ut.wolfe_done({"phase": "swiss", "status": "Dropped after Round 6"}))
