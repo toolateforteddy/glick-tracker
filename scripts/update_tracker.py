@@ -579,10 +579,16 @@ GIVE_UP_AFTER = timedelta(hours=6)
 
 
 def weekend_over(now: datetime) -> datetime:
-    """Monday 06:00 UTC, when the sync schedule's weekend window closes."""
-    days = (0 - now.weekday()) % 7
-    monday = (now + timedelta(days=days)).replace(hour=6, minute=0, second=0, microsecond=0)
-    return monday if monday > now else monday + timedelta(days=7)
+    """When to look again after giving up: Monday 06:00 UTC during a weekend, else Friday 00:00.
+
+    Events run Friday to Sunday (plus the late US evening into Monday), so a give-up on a
+    weekday must wake before the next weekend rather than a week after it.
+    """
+    start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    if now.weekday() >= 4 or (now.weekday() == 0 and now.hour < 6):
+        days = (0 - now.weekday()) % 7
+        return start + timedelta(days=days, hours=6)
+    return start + timedelta(days=4 - now.weekday())
 
 
 def wolfe_done(payload: dict) -> bool:
@@ -600,6 +606,9 @@ def wolfe_done(payload: dict) -> bool:
 def idle_snooze(previous: dict | None, now: datetime) -> dict:
     """snoozeUntil/idleSince for a run that found nothing live to track."""
     since = parse_date((previous or {}).get("idleSince")) or now
+    woke = parse_date((previous or {}).get("snoozeUntil"))
+    if woke and now >= woke and woke - since > GIVE_UP_AFTER + timedelta(minutes=idle_minutes()):
+        since = now  # a give-up snooze just ended: start a fresh six hours of checks
     if now - since >= GIVE_UP_AFTER:
         until = weekend_over(now).isoformat().replace("+00:00", "Z")
     else:
