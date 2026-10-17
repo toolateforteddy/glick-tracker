@@ -194,9 +194,35 @@ class RunTest(unittest.TestCase):
         self.assertFalse(p["currentMatchPending"])
         self.assertFalse(ut.wolfe_done(p))
 
-    def test_not_in_an_event_he_never_played(self):
-        with mock.patch.object(rk9, "fetch", return_value=page({1: [match(1, ("Bob B", "0-0-0"), ("Cara C", "0-0-0"))]})):
-            self.assertIsNone(ut.run_rk9("LO002", "L", "Wolfe Glick", None, NOW, "s"))
+    def absent_run(self, roster, previous=None):
+        pairings = page({1: [match(1, ("Bob B", "0-0-0"), ("Cara C", "0-0-0"))]})
+        with mock.patch.object(rk9, "fetch", side_effect=lambda path: roster if "roster" in path else pairings) as f:
+            p = ut.run_rk9("NI002", "Nice", "Wolfe Glick", previous, NOW, "s")
+        return p, [c.args[0] for c in f.call_args_list]
+
+    def test_event_he_is_not_registered_for(self):
+        p, calls = self.absent_run("<table></table>")
+        self.assertEqual(calls, ["/pairings/NI002", "/roster/NI002"])
+        self.assertTrue(p["notCompeting"])
+        self.assertEqual(p["tournament"], "Nice")
+        self.assertEqual(p["tournamentUrl"], "https://rk9.gg/tournament/NI002")
+        self.assertEqual(p["matches"], [])
+        self.assertEqual(p["snoozeUntil"], "2026-10-11T16:00:00Z")
+        self.assertFalse(ut.wolfe_done(p))
+
+    def test_not_competing_backoff_starts_fresh_per_event(self):
+        stale = {"tournamentId": "LO002", "idleSince": "2026-10-04T12:00:00Z"}
+        p, _ = self.absent_run("<table></table>", stale)
+        self.assertEqual(p["idleSince"], "2026-10-11T15:00:00Z")
+        later, calls = self.absent_run("<table></table>", {**p, "idleSince": "2026-10-11T08:00:00Z"})
+        self.assertEqual(later["snoozeUntil"], "2026-10-12T06:00:00Z")
+        self.assertEqual(calls, ["/pairings/NI002"])  # play has started, so the roster isn't re-read
+
+    def test_registered_but_not_paired_yet(self):
+        roster = """<table><tr><td>1</td><td>Wolfe</td><td>Glick</td><td>US</td><td>Masters</td>
+            <td>x</td><td></td><td></td></tr></table>"""
+        p, _ = self.absent_run(roster)
+        self.assertIsNone(p)
 
     def test_snoozed(self):
         prev = {"source": "rk9", "snoozeUntil": "2026-10-11T15:30:00Z"}

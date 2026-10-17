@@ -463,12 +463,13 @@ def run_rk9(rk9_id: str, name: str | None, player_name: str, previous: dict | No
     swiss = int(os.environ.get("RK9_SWISS_ROUNDS") or 0) or None
     cut = int(os.environ.get("RK9_TOP_CUT") or 8)
     rounds, info = rk9.scrape(rk9_id, pod, previous, player_name)
+    name = name or os.environ.get("RK9_EVENT_NAME") or info["name"] or rk9_id
     if not rounds:
-        return rk9_cut(rk9_id, pod, player_name, previous, info, now, stream, swiss, cut)
-    details, standings, pairings, me = rk9.build_inputs(
-        rk9_id, name or os.environ.get("RK9_EVENT_NAME") or info["name"] or rk9_id, rounds, player_name, previous, swiss, cut)
+        return (rk9_cut(rk9_id, pod, player_name, previous, info, now, stream, swiss, cut)
+                or rk9_absent(rk9_id, name, info, player_name, previous, now, started=bool(info.get("latest"))))
+    details, standings, pairings, me = rk9.build_inputs(rk9_id, name, rounds, player_name, previous, swiss, cut)
     if not me:
-        return None
+        return rk9_absent(rk9_id, name, info, player_name, previous, now, started=True)
     payload = build_payload(rk9_id, details, standings, pairings, me, previous, now, stream)
 
     # Remember each opponent's latest record so OPW works after they leave the pairings.
@@ -525,6 +526,38 @@ def rk9_cut(rk9_id: str, pod: int, player_name: str, previous: dict | None, info
     if payload.get("topCutStatus") != "clinched":
         payload.update(topCutStatus="eliminated", topCutAlive=False)
     return payload
+
+
+def rk9_absent(rk9_id: str, name: str, info: dict, player_name: str, previous: dict | None,
+               now: datetime, started: bool) -> dict | None:
+    """An RK9 event Wolfe isn't registered for, so fans see that instead of his last event.
+
+    None if he is on the Masters roster (his first pairing just isn't up yet). Checks back
+    with the usual idle back-off in case the roster changes before the event starts. The
+    roster page is large, so once play has started an earlier "not registered" is trusted.
+    """
+    same_event = previous if previous and previous.get("tournamentId") == rk9_id else None
+    known_absent = bool(same_event and same_event.get("notCompeting") and started)
+    if not known_absent and rk9.parse_roster(rk9.fetch(f"/roster/{rk9_id}"), player_name):
+        return None
+    return {
+        "updatedAt": now.isoformat().replace("+00:00", "Z"),
+        "source": "rk9",
+        "tournament": name,
+        "tournamentId": rk9_id,
+        "tournamentUrl": f"{rk9.RK9}/tournament/{rk9_id}",
+        "status": "Not competing",
+        "phase": "idle",
+        "notCompeting": True,
+        "players": info.get("players"),
+        "record": {"w": 0, "l": 0, "t": 0},
+        "standing": None,
+        "opw": None,
+        "topCutAlive": False,
+        "team": [],
+        "matches": [],
+        **idle_snooze(same_event, now),
+    }
 
 
 def snoozed(previous: dict | None, now: datetime) -> bool:

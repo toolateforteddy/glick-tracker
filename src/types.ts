@@ -40,6 +40,8 @@ export interface TrackerPayload {
   stream?: string | null
   roundStartedAt?: string | null
   currentMatchPending?: boolean
+  /** A tournament is running that Wolfe isn't registered for. */
+  notCompeting?: boolean
   team: TeamMember[]
   matches: MatchRow[]
 }

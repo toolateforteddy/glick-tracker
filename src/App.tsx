@@ -58,16 +58,18 @@ export default function App() {
         <main className="space-y-4">
           <HeroStatus data={data} />
           {/* Wide screens: team on the left, record and rounds on the right. Phones keep record first. */}
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-            <div className="min-w-0 space-y-4 lg:order-2 lg:col-span-2">
-              <RecordCard data={data} />
-              <RoundTimer data={data} />
-              <RoundLog matches={data.matches} />
+          {!data.notCompeting && (
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+              <div className="min-w-0 space-y-4 lg:order-2 lg:col-span-2">
+                <RecordCard data={data} />
+                <RoundTimer data={data} />
+                <RoundLog matches={data.matches} />
+              </div>
+              <div className="min-w-0 lg:order-1 lg:col-span-3">
+                <TeamGrid team={data.team ?? []} />
+              </div>
             </div>
-            <div className="min-w-0 lg:order-1 lg:col-span-3">
-              <TeamGrid team={data.team ?? []} />
-            </div>
-          </div>
+          )}
         </main>
       )}
 
